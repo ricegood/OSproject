@@ -34,21 +34,23 @@ int32u_t eos_destroy_task(eos_tcb_t *task) {
 void eos_schedule() {
 	/* check current task */
 	if (_os_current_task == NULL){
-		printf("current task null!");
+		printf("current task null!\n");
 		//_os_restore_context(_os_ready_queue[0]->ptr_data);
 	}
 	else {
-		printf("have task!");
-		/*
+		printf("have task!\n");
+		
 		int32u_t stkPtr = _os_save_context();
 		if (stkPtr == NULL) {
 			// function termination
+			printf("save context return null! \n");
 			return;
 		} else {
-			_os_current_task->stkPtr = stkPtr; // save stkPtr to tcb
-			_os_restore_context(_os_ready_queue[0]->ptr_data); // restore context
+			printf("save context return stkPtr! \n");
+			//_os_current_task->stkPtr = stkPtr; // save stkPtr to tcb
+			//_os_restore_context(_os_ready_queue[0]->ptr_data); // restore context
 		}
-		*/
+		
 	}
 }
 
