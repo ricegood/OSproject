@@ -39,7 +39,7 @@ int32u_t eos_create_task(eos_tcb_t *task, addr_t sblock_start, size_t sblock_siz
 	printf("print eip = %p\n", *(sp++));
 	printf("print entry return address = %p\n", *(sp++));
 	printf("print arg = %p\n", *(sp));
-	printf("***print sp = %p\n", *(sp));
+	printf("***print sp = %p\n", sp);
 	printf("===End create task===\n\n");
 	return 0;
 }
