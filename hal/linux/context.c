@@ -54,7 +54,7 @@ addr_t _os_save_context() {
     push $resume_eip;\
     push %0;\
   resume_eip:"
-    :: "r"(_eflags));
+    :: "m"(_eflags));
 
   /* push registers (PUSHA) */
   __asm__ __volatile__ ("\
