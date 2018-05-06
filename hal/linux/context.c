@@ -52,10 +52,8 @@ addr_t _os_save_context() {
   printf("_eflags:%d", _eflags);
   /* push register */
   __asm__ __volatile__ ("\
-    push $resume_eip;\
-    push %0"
-    :: "m"(_eflags));
-  
+    push $resume_eip);
+
   __asm__ __volatile__ ("\
     push %%eax;\
     push %%ecx;\
