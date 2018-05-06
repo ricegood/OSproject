@@ -28,6 +28,7 @@ void print_context(addr_t context) {
 }
 
 addr_t _os_create_context(addr_t stack_base, size_t stack_size, void (*entry)(void *), void *arg) {
+  printf("===Start create context===\n");
   int32u_t* sp = stack_base + stack_size/4 - 1;  // stack pointer
   *(sp++) = arg;    // arg
   *(sp++) = NULL;   // entry return address
@@ -42,10 +43,12 @@ addr_t _os_create_context(addr_t stack_base, size_t stack_size, void (*entry)(vo
   *(sp++) = NULL;   // esi
   *(sp) = NULL;     // edi
   addr_t contextAddr = sp;   // context address = edi address
+  printf("===End create context===\n");
   return contextAddr;        // return context address
 }
 
 void _os_restore_context(addr_t sp) {
+  printf("===Start restore context===\n");
  __asm__ __volatile__ ("\
     mov %0, %%esp;\
     pop %%edi;\
@@ -60,13 +63,13 @@ void _os_restore_context(addr_t sp) {
     leave;\
     ret;"
     :: "r"(sp));
+ printf("===End restore context===\n");
 }
 
 addr_t _os_save_context() {
+  printf("===Start save context===\n");
   /* push register */
   __asm__ __volatile__ ("\
-    push %%ebp;\
-    mov %%esp, %%ebp;\
     push $resume_eip;\
     push _eflags;\
     push %%eax;\
@@ -85,4 +88,5 @@ addr_t _os_save_context() {
     ret;\
   resume_eip:"
     :: );
+  printf("===End save context===\n");
 }
