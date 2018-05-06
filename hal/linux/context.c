@@ -50,9 +50,12 @@ void _os_restore_context(addr_t sp) {
 
 addr_t _os_save_context() {
   /* push register */
+  /*
   __asm__ __volatile__ ("\
-    push $resume_eip");
-
+    push $resume_eip
+    push %0"
+    :: "m"(_eflags));
+  */
   __asm__ __volatile__ ("\
     push %%eax;\
     push %%ecx;\
@@ -65,6 +68,6 @@ addr_t _os_save_context() {
     mov %%esp, %%eax;\
     push 12(%%esp);\
     push 12(%%esp);\
-    mov %%esp, %%ebp;\
-  resume_eip:");
+    mov %%esp, %%ebp");
+//  resume_eip:");
 }
