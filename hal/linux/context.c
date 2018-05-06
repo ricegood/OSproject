@@ -67,12 +67,6 @@ addr_t _os_save_context() {
   __asm__ __volatile__ ("\
     push $resume_eip;\
     push _eflags;\
-    leave;\
-    ret;\
-  resume_eip:"
-    :: );
-  /*
-      
     push %%eax;\
     push %%ecx;\
     push %%edx;\
@@ -81,6 +75,13 @@ addr_t _os_save_context() {
     push %%ebp;\
     push %%esi;\
     push %%edi;\
+    leave;\
+    ret;\
+  resume_eip:"
+    :: );
+  /*
+      
+    
     mov %%esp, %%eax;\
     push 12(%%esp);\
     push 12(%%esp);\
