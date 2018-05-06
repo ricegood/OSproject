@@ -22,9 +22,11 @@ static _os_node_t *_os_ready_queue[LOWEST_PRIORITY + 1];
 static eos_tcb_t *_os_current_task;
 
 int32u_t eos_create_task(eos_tcb_t *task, addr_t sblock_start, size_t sblock_size, void (*entry)(void *arg), void *arg, int32u_t priority) {
+	printf("===Start create task===\n");
 	task->priority = priority;
 	task->stkPtr = _os_create_context(sblock_start, sblock_size, entry, arg);	// set tcb stack pointer
 	PRINT("task: 0x%x, priority: %d\n", (int32u_t)task, priority);
+	printf("===End create task===\n");
 	return 0;
 }
 
@@ -32,8 +34,9 @@ int32u_t eos_destroy_task(eos_tcb_t *task) {
 }
 
 void eos_schedule() {
+	printf("=====Start Scheduling=====\n");
 	/* check current task */
-	if (_os_current_task == 0){
+	if (_os_current_task == NULL){
 		printf("current task null!\n");
 		//_os_restore_context(_os_ready_queue[0]->ptr_data);
 	}
@@ -41,7 +44,7 @@ void eos_schedule() {
 		printf("have task!\n");
 		
 		int32u_t stkPtr = _os_save_context();
-		if (stkPtr == 0) {
+		if (stkPtr == NULL) {
 			// function termination
 			printf("save context return null! \n");
 			return;
