@@ -22,7 +22,10 @@ static _os_node_t *_os_ready_queue[LOWEST_PRIORITY + 1];
 static eos_tcb_t *_os_current_task;
 
 int32u_t eos_create_task(eos_tcb_t *task, addr_t sblock_start, size_t sblock_size, void (*entry)(void *arg), void *arg, int32u_t priority) {
+	task->priority = priority;
+	task->stkPtr = _os_create_context(sblock_start, sblock_size, entry, arg);	// set tcb stack pointer
 	PRINT("task: 0x%x, priority: %d\n", (int32u_t)task, priority);
+	return 0;
 }
 
 int32u_t eos_destroy_task(eos_tcb_t *task) {

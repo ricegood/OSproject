@@ -81,9 +81,9 @@ extern void eos_trigger_counter(eos_counter_t* counter);
 typedef struct tcb {
   // 태스크 state, 우선순위, 주기, 스택 포인터 등
   int16u_t state;
-  int16u_t priority;
-  int16u_t period;
-  addr_t* stkPtr;
+  int32u_t priority;
+  int32u_t period;
+  addr_t stkPtr;  // *이 있어야하나?
 } eos_tcb_t;
 
 /*
