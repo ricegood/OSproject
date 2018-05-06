@@ -58,9 +58,6 @@ void _os_restore_context(addr_t sp) {
     pop %%ecx;\
     pop %%eax;\
     pop _eflags;\
-    pop %%eip;\
-    pop %%ebp;\
-    pop %%eip;\
     leave;\
     ret;"
     :: "r"(sp));
