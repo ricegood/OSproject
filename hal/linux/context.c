@@ -51,9 +51,8 @@ void _os_restore_context(addr_t sp) {
 addr_t _os_save_context() {
   addr_t a;
   __asm__ __volatile__ ("\
-    mov $0x0, %%esp;\
-    jmp *%0"
-    :: "r"(_vector[0]));
+    mov $0x0, %%esp;"
+    :: );
   //__asm__ __volatile__("pusha");
   return a;
 }
