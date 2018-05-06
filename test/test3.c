@@ -3,11 +3,19 @@
  
 int main(void)
 {
+        void *stack_base;
+        int stack_size;
         char *test_t;
         int *intPtr;
         intPtr = test_t;
         printf("%d\n", sizeof(test_t) * CHAR_BIT);
         printf("%d\n", sizeof(test_t) * CHAR_BIT);
+
+        intPtr = 
+
+        addr_t _os_create_context(addr_t stack_base, size_t stack_size, void (*entry)(void *), void *arg) {
+  int32u_t* sp = stack_base + stack_size/4 - 1;  // stack pointer
+  *(sp++) = arg;    // arg
         
         printf("포인터 자체의 주소 : %p\n", &test_t); // 포인터 자체의 주소
         printf("포인터 안에 담긴 주소 : %p\n", test_t); // 포인터 자체의 내용 = 포인터 안에 담긴 주소
