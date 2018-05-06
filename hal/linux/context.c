@@ -59,5 +59,5 @@ addr_t _os_save_context() {
     push %%ebp;\
     push %%esi;\
     push %%edi"
-  );
+    :: );
 }
