@@ -47,6 +47,23 @@ addr_t _os_create_context(addr_t stack_base, size_t stack_size, void (*entry)(vo
 }
 
 void _os_restore_context(addr_t sp) {
+ __asm__ __volatile__ ("\
+    mov %0, %%esp;\
+    pop %%edi;\
+    pop %%esi;\
+    pop %%ebp;\
+    pop %%esp;\
+    pop %%ebx;\
+    pop %%edx;\
+    pop %%ecx;\
+    pop %%eax;\
+    pop _eflags;\
+    pop %%eip;\
+    pop %%ebp;\
+    pop %%eip;\
+    leave;\
+    ret;"
+    :: "r"(sp));
 }
 
 addr_t _os_save_context() {
