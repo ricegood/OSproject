@@ -27,19 +27,19 @@ int32u_t eos_create_task(eos_tcb_t *task, addr_t sblock_start, size_t sblock_siz
 	task->stkPtr = _os_create_context(sblock_start, sblock_size, entry, arg);	// set tcb stack pointer
 	PRINT("task: 0x%x, priority: %d\n", (int32u_t)task, priority);
 	int32u_t* sp = task->stkPtr;
-	printf("print edi = %p\n", *(task->sp));
-	printf("print esi = %p\n", *(task->sp+1));
-	printf("print ebp = %p\n", *(task->sp+2));
-	printf("print esp = %p\n", *(task->sp+3));
-	printf("print ebx = %p\n", *(task->sp+4));
-	printf("print edx = %p\n", *(task->sp+5));
-	printf("print ecx = %p\n", *(task->sp+6));
-	printf("print eax = %p\n", *(task->sp+7));
-	printf("print eflags = %p\n", *(task->sp+8));
-	printf("print eip = %p\n", *(task->sp+9));
-	printf("print entry return address = %p\n", *(task->sp+10));
-	printf("print arg = %p\n", *(task->sp+11));
-	printf("***print sp = %p\n", *(task->sp+11));
+	printf("print edi = %p\n", *(sp++));
+	printf("print esi = %p\n", *(sp++));
+	printf("print ebp = %p\n", *(sp++));
+	printf("print esp = %p\n", *(sp++));
+	printf("print ebx = %p\n", *(sp++));
+	printf("print edx = %p\n", *(sp++));
+	printf("print ecx = %p\n", *(sp++));
+	printf("print eax = %p\n", *(sp++));
+	printf("print eflags = %p\n", *(sp++));
+	printf("print eip = %p\n", *(sp++));
+	printf("print entry return address = %p\n", *(sp++));
+	printf("print arg = %p\n", *(sp));
+	printf("***print sp = %p\n", *(sp));
 	printf("===End create task===\n\n");
 	return 0;
 }
