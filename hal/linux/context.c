@@ -49,4 +49,6 @@ void _os_restore_context(addr_t sp) {
 }
 
 addr_t _os_save_context() {
+  __asm__ __volatile__("push %%eip");
+  //__asm__ __volatile__("pusha");
 }
