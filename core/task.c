@@ -34,7 +34,7 @@ int32u_t eos_destroy_task(eos_tcb_t *task) {
 void eos_schedule() {
 	/* check current task */
 	if (_os_current_task == NULL)
-		_os_restore_context(_os_ready_queue[0]->ptr_data->stkPtr);
+		_os_restore_context(_os_ready_queue[0]->ptr_data);
 	else {
 		int32u_t stkPtr = _os_save_context();
 		if (stkPtr == NULL) {
