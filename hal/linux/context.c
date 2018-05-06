@@ -83,10 +83,10 @@ addr_t _os_save_context() {
     mov %%esp, %%eax;\
     push 1(%%ebp);\
     push %%ebp;\
-    leave;\
+    mov %%esp, %%ebp;\
     ret;\
   resume_eip:"
     :: );
-  //    mov %%esp, %%ebp;\
+  // leave;\
   printf("===End save context===\n");
 }

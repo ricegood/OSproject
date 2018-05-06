@@ -66,8 +66,8 @@ void eos_schedule() {
 			return;
 		} else {
 			printf("save context return stkPtr! \n");
-			_os_current_task->stkPtr = stkPtr; // save stkPtr to tcb
-			_os_restore_context(_os_ready_queue[0]->ptr_data); // restore context
+			//_os_current_task->stkPtr = stkPtr; // save stkPtr to tcb
+			//_os_restore_context(_os_ready_queue[0]->ptr_data); // restore context
 		}
 		
 	}
