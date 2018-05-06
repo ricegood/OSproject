@@ -33,7 +33,7 @@ int32u_t eos_destroy_task(eos_tcb_t *task) {
 
 void eos_schedule() {
 	/* check current task */
-	if (_os_current_task == NULL){
+	if (_os_current_task == 0){
 		printf("current task null!\n");
 		//_os_restore_context(_os_ready_queue[0]->ptr_data);
 	}
@@ -41,7 +41,7 @@ void eos_schedule() {
 		printf("have task!\n");
 		
 		int32u_t stkPtr = _os_save_context();
-		if (stkPtr == NULL) {
+		if (stkPtr == 0) {
 			// function termination
 			printf("save context return null! \n");
 			return;
