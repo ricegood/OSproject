@@ -78,7 +78,7 @@ addr_t _os_save_context() {
     mov %%esp, %%eax;\
     push 12(%%esp);\
     push 12(%%esp);\
-    mov %%eax, %%ebp;\
+    mov %%esp, %%ebx;\
     leave;\
     ret;\
   resume_eip:"
