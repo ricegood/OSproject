@@ -66,8 +66,7 @@ addr_t _os_save_context() {
     push 12(%%esp);\
     push 12(%%esp);\
     mov %%esp, %%ebp;\
-    
+
   resume_eip:"
-    :: "m"(_eflags));"
-  );
+    :: "m"(_eflags));
 }
