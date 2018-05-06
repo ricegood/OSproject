@@ -1,5 +1,6 @@
 #include <core/eos.h>
 #include <core/eos_internal.h>
+#include <emulator/private.h>
 
 typedef struct _os_context {
   // 문맥 전환 시 저장해야 할 CPU 레지스터의 종류와 순서를 결정
@@ -50,12 +51,12 @@ void _os_restore_context(addr_t sp) {
 
 addr_t _os_save_context() {
   /* push register */
-  /*
+  
   __asm__ __volatile__ ("\
     push $resume_eip
     push %0"
     :: "m"(_eflags));
-  */
+  
   __asm__ __volatile__ ("\
     push %%eax;\
     push %%ecx;\
