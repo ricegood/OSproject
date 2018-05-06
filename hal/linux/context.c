@@ -41,7 +41,8 @@ addr_t _os_create_context(addr_t stack_base, size_t stack_size, void (*entry)(vo
   *(sp++) = NULL;   // ebp
   *(sp++) = NULL;   // esi
   *(sp) = NULL;     // edi
-  return sp;        // return edi
+  addr_t contextAddr = sp;   // context address = edi address
+  return contextAddr;        // return context address
 }
 
 void _os_restore_context(addr_t sp) {
