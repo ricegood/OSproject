@@ -30,7 +30,7 @@ void print_context(addr_t context) {
 addr_t _os_create_context(addr_t stack_base, size_t stack_size, void (*entry)(void *), void *arg) {
   printf("===Start create context===\n");
   int32u_t* sp = stack_base + stack_size/4 - 1;  // stack pointer
-  printf("***sp = %p", sp);
+  //printf("***sp = %p\n", sp);
   *(sp--) = arg;    // arg
   *(sp--) = NULL;   // entry return address
   *(sp--) = entry;  // eip
@@ -83,10 +83,10 @@ addr_t _os_save_context() {
     mov %%esp, %%eax;\
     push 1(%%ebp);\
     push %%ebp;\
-    mov %%esp, %%ebp;\
     leave;\
     ret;\
   resume_eip:"
     :: );
+  //    mov %%esp, %%ebp;\
   printf("===End save context===\n");
 }
