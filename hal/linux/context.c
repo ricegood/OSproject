@@ -49,10 +49,17 @@ void _os_restore_context(addr_t sp) {
 }
 
 addr_t _os_save_context() {
-  addr_t a;
+  /* push registers (PUSHA) */
   __asm__ __volatile__ ("\
-    push %%esp"
+    push %%eip\
+    push %%eflags\
+    push %%eax\
+    push %%ecx\
+    push %%edx\
+    push %%ebx\
+    push %%esp\
+    push %%ebp\
+    push %%esi\
+    push %%edi"
     :: );
-  //__asm__ __volatile__("pusha");
-  return a;
 }
