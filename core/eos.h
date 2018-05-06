@@ -83,7 +83,7 @@ typedef struct tcb {
   int16u_t state;
   int16u_t priority;
   int16u_t period;
-  int32u_t stkPtr;
+  *addr_t stkPtr;
 } eos_tcb_t;
 
 /*
