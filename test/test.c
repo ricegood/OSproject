@@ -7,7 +7,7 @@ int main(void)
         printf("%d\n", sizeof(test_t) * CHAR_BIT);
         printf("%d\n", sizeof(test_t) * CHAR_BIT);
         
-        printf("포인터 자체의 주소 : %p\n", &test_t); // 포인터 자체의 주소
+        printf("포인터 a자체의 주소 : %p\n", &test_t); // 포인터 자체의 주소
         printf("포인터 안에 담긴 주소 : %p\n", test_t); // 포인터 자체의 내용 = 포인터 안에 담긴 주소
         printf("포인터 안에 담긴 주소의 내용 : %p\n", *test_t); // 포인터 안에 담긴 주소의 내용
         printf("============================\n");
