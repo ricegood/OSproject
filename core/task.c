@@ -42,7 +42,7 @@ void eos_schedule() {
 			return;
 		} else {
 			_os_current_task->stkPtr = stkPtr; // save stkPtr to tcb
-			_os_restore_context(_os_ready_queue[0]->ptr_data->stkPtr); // restore context
+			_os_restore_context(_os_ready_queue[0]->ptr_data); // restore context
 		}
 	}
 }
