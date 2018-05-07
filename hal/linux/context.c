@@ -82,8 +82,10 @@ addr_t _os_save_context() {
   /* push register */
   __asm__ __volatile__ ("\
     push $resume_eip;\
-    push _eflags;"
-    :: );
+    push _eflags;
+  resume_eip:\
+    pop %0;"
+    : "=r"(eip) : );
   printf("save context\n");
   printf("eip : %p\n, eip");
   __asm__ __volatile__ ("\
@@ -111,10 +113,8 @@ addr_t _os_save_context() {
     mov %%esp, %%ebp;\
     mov %%esp, %1;\
     mov %%eax, %2;\
-    mov %%ebp, %3;\
-  resume_eip:\
-    pop %5;"
-    : "=r"(sp1), "=r"(sp2), "=r"(eax), "=r"(ebp), "=r"(ebp01), "=r"(eip) : );
+    mov %%ebp, %3;"
+    : "=r"(sp1), "=r"(sp2), "=r"(eax), "=r"(ebp), "=r"(ebp01) : );
   printf("@@ sp1 : %p\n, sp2 : %p\n, eax : %p\n, ebp01 : %p\n, ebp : %p\n, eip : %p\n", sp1, sp2, eax, ebp01, ebp, eip);
   
   __asm__ __volatile__ ("\
