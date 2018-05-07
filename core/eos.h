@@ -90,7 +90,7 @@ typedef struct tcb {
     int32u_t state;         // state of a correstpoding task (not used in project2)
     int32u_t priority;      // priority of a corresponding task
     int32u_t period;        // period of a corresponding task (not used in project2)
-    addr_t stack_ptr;       // stack pointer which indicates where the context of a corresponding task is saved
+    addr_t stkPtr;       // stack pointer which indicates where the context of a corresponding task is saved
     _os_node_t node;        // task node. useful for managing ready queue (project2)
 } eos_tcb_t;
 
