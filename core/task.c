@@ -28,8 +28,7 @@ int32u_t eos_create_task(eos_tcb_t *task, addr_t sblock_start, size_t sblock_siz
 	task->priority = priority; // set tcb priority
 	task->stkPtr = _os_create_context(sblock_start, sblock_size, entry, arg);	// set tcb stack pointer
 	task->state = READY; // set tcb state
-
-	_os_set_ready((int8u_t)priority);
+	// _os_set_ready((int8u_t)priority);
 
 	// Create node
 	printf("Create node\n");
@@ -71,7 +70,7 @@ int32u_t eos_destroy_task(eos_tcb_t *task) {
 void eos_schedule() {
 	printf("=====Start Scheduling=====\n");
 	/* check current task */
-	if (_os_current_task == NULL){
+	if (_os_current_task->stkPtr == NULL){
 		printf("current task null!\n");
 		printf("ready queue [0] : %p\n", _os_ready_queue[0]);
 		int i = 0;
