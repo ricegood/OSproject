@@ -79,7 +79,6 @@ extern void eos_trigger_counter(eos_counter_t* counter);
 
 /* The TCB (task control block) structure */
 typedef struct tcb {
-	// 태스크 state, 우선순위, 주기, 스택 포인터 등
 	int16u_t state;
 	int32u_t priority;
 	int32u_t period;  // 언제 설정 ?
