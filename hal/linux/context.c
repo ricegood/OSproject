@@ -117,6 +117,7 @@ addr_t _os_save_context() {
   __asm__ __volatile__ ("\
     mov %%ebp, %%esp;\
     pop %%ebp;\
+    pop %%ebp;\
     mov %%ebp, %0;"
     : "=m"(ebp2) : );
   printf("@@ ebp2 : %p\n", ebp2);
