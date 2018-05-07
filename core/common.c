@@ -31,6 +31,7 @@ void _os_add_node_priority(_os_node_t **head, _os_node_t *new_node) {
 	 _os_node_t *node;
 	 
 	 if (*head) {
+	 	printf("(HEAD!=NULL)_os_add_node_priority!\n");
 	 	node = (*head);
 	 	if (node -> priority > new_node -> priority) {
 	 		(*head) = new_node;
@@ -45,7 +46,7 @@ void _os_add_node_priority(_os_node_t **head, _os_node_t *new_node) {
         new_node -> next = node;
         (new_node -> next) -> previous = new_node;
 	 } else {
-	 	printf("_os_add_node_priority if(!*head)");
+	 	printf("(HEAD==NULL)_os_add_node_priority!\n");
 	 	(*head) = new_node;
 	 	new_node -> previous = new_node;
 	 	new_node -> next = new_node;
