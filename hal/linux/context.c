@@ -74,6 +74,7 @@ addr_t _os_save_context() {
   int32u_t* sp2;
   int32u_t* eax;
   int32u_t* ebp0;
+  int32u_t* ebp01;
   int32u_t* ebp;
   int32u_t* ebp2;
   printf("===Start save context===\n");
@@ -104,13 +105,14 @@ addr_t _os_save_context() {
     mov %%esp, %0;\
     push 1(%%ebp);\
     push %%ebp;\
+    mov %%ebp, %4;\
     mov %%esp, %%ebp;\
     mov %%esp, %1;\
     mov %%eax, %2;\
     mov %%ebp, %3;\
   resume_eip:"
-    : "=r"(sp1), "=m"(sp2), "=m"(eax), "=m"(ebp) : );
-  printf("@@ sp1 : %p\n, sp2 : %p\n, eax : %p\n, ebp : %p\n", sp1, sp2, eax, ebp);
+    : "=r"(sp1), "=m"(sp2), "=m"(eax), "=m"(ebp), "=m"(ebp01) : );
+  printf("@@ sp1 : %p\n, sp2 : %p\n, eax : %p\n, ebp01 : %p\n, ebp : %p\n", sp1, sp2, eax, ebp01, ebp);
   
   __asm__ __volatile__ ("\
     movl %%ebp, %%esp;\
