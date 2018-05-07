@@ -1,5 +1,6 @@
 #include <core/eos.h>
 #include <core/eos_internal.h>
+#include <hal/linux/emulator/private.h>
 
 typedef struct _os_context {
   // 문맥 전환 시 저장해야 할 CPU 레지스터의 종류와 순서를 결정
