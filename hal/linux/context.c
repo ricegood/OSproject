@@ -110,7 +110,8 @@ addr_t _os_save_context() {
   printf("@@ sp1 : %p\n, sp2 : %p\n, eax : %p\n, ebp : %p\n", sp1, sp2, eax, ebp);
   printf("===End save context===\n");
   __asm__ __volatile__ ("\
-    leave;\
+    movl %%ebp, %%esp;\
+    popl %%ebp;\
     ret;"
     :: );
 }
