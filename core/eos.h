@@ -79,12 +79,19 @@ extern void eos_trigger_counter(eos_counter_t* counter);
 
 /* The TCB (task control block) structure */
 typedef struct tcb {
+  /*
   // 태스크 state, 우선순위, 주기, 스택 포인터 등
   int16u_t state;
   int32u_t priority;
   int32u_t period;  // 언제 설정 ?
   addr_t stkPtr;
   _os_node_t node;
+  */
+    int32u_t state;         // state of a correstpoding task (not used in project2)
+    int32u_t priority;      // priority of a corresponding task
+    int32u_t period;        // period of a corresponding task (not used in project2)
+    addr_t stack_ptr;       // stack pointer which indicates where the context of a corresponding task is saved
+    _os_node_t node;        // task node. useful for managing ready queue (project2)
 } eos_tcb_t;
 
 /*
