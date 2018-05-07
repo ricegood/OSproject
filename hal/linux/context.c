@@ -87,7 +87,7 @@ addr_t _os_save_context() {
     :: );
   printf("save context2\n");
   __asm__ __volatile__ ("\
-    mov %%esp, %%eax;\
+    mov %0, %%eax;\
     push 1(%%ebp);\
     push %%ebp;\
     mov %%esp, %0;\
