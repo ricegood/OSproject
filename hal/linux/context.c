@@ -59,10 +59,11 @@ void _os_restore_context(addr_t sp) {
     pop %%edx;\
     pop %%ecx;\
     pop %%eax;\
-    pop _eflags;\
-    ret;"
+    pop _eflags;"
     :: "r"(sp));
  printf("===End restore context===\n");
+ __asm__ __volatile__ ("\
+    ret;");
 }
 
 addr_t _os_save_context() {
