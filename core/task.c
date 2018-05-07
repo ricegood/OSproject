@@ -27,7 +27,7 @@ int32u_t eos_create_task(eos_tcb_t *task, addr_t sblock_start, size_t sblock_siz
 	printf("Set TCB\n");
 	task->priority = priority; // set tcb priority
 	printf("_os_current_task : %p\n", _os_current_task);
-	task->stkPtr = _os_create_context(sblock_start, sblock_size, entry, arg);	// set tcb stack pointer
+	_os_create_context(sblock_start, sblock_size, entry, arg);	// set tcb stack pointer
 	printf("_os_current_task : %p\n", _os_current_task);
 	task->state = READY; // set tcb state
 
