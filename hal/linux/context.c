@@ -82,7 +82,7 @@ addr_t _os_save_context() {
   /* push register */
   __asm__ __volatile__ ("\
     push $resume_eip;\
-    push _eflags;
+    push _eflags;\
   resume_eip:\
     pop %0;"
     : "=r"(eip) : );
