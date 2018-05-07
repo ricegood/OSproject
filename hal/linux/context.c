@@ -67,6 +67,7 @@ void _os_restore_context(addr_t sp) {
 }
 
 addr_t _os_save_context() {
+  int32u_t* sp0;
   int32u_t* sp1;
   int32u_t* sp2;
   int32u_t* eax;
@@ -79,6 +80,7 @@ addr_t _os_save_context() {
     :: );
   printf("save context\n");
   __asm__ __volatile__ ("\
+    mov %%esp, %0;\
     push %%eax;\
     push %%ecx;\
     push %%edx;\
@@ -87,7 +89,8 @@ addr_t _os_save_context() {
     push %%ebp;\
     push %%esi;\
     push %%edi;"
-    :: );
+    : "=m"(sp0) : );
+  printf("@@ sp0 : %p\n, *sp0);
   printf("save context2\n");
   __asm__ __volatile__ ("\
     mov %%esp, %%eax;\
