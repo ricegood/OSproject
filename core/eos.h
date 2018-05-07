@@ -82,8 +82,8 @@ typedef struct tcb {
   // 태스크 state, 우선순위, 주기, 스택 포인터 등
   int16u_t state;
   int32u_t priority;
-  int32u_t period;
-  addr_t stkPtr;  // *이 있어야하나?
+  int32u_t period;  // 언제 설정 ?
+  addr_t stkPtr;
 } eos_tcb_t;
 
 /*
