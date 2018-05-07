@@ -102,6 +102,7 @@ addr_t _os_save_context() {
     mov %%esp, %0;\
     push 1(%%ebp);\
     push %%ebp;\
+    mov %%esp, %%ebp;\
     mov %%esp, %1;\
     mov %%eax, %2;\
     mov %%ebp, %3;\
