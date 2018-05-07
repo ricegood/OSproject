@@ -84,6 +84,7 @@ typedef struct tcb {
   int32u_t priority;
   int32u_t period;  // 언제 설정 ?
   addr_t stkPtr;
+  _os_node_t node;
 } eos_tcb_t;
 
 /*
