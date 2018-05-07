@@ -88,7 +88,7 @@ addr_t _os_save_context() {
     leave;\
     ret;\
   resume_eip:"
-    : "m"(sp) : );
+    : "=m"(sp) : );
   printf("@@ sp : %p\n", *sp);
   printf("===End save context===\n");
 }
