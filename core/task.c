@@ -33,8 +33,6 @@ int32u_t eos_create_task(eos_tcb_t *task, addr_t sblock_start, size_t sblock_siz
 	// Create node
 	printf("Create node\n");
 	_os_node_t node;
-	node.next = NULL;
-	node.previous = NULL;
 	node.ptr_data = task;
 	node.priority = priority;
 
