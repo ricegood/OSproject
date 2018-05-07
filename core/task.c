@@ -38,14 +38,9 @@ int32u_t eos_create_task(eos_tcb_t *task, addr_t sblock_start, size_t sblock_siz
 	node->ptr_data = task;
 	node->priority = priority;
 
-	// Create node head
-	printf("Create node head\n");
-	_os_node_t ** nodeHead;
-	*nodeHead = _os_ready_queue[0];
-
 	// Add node to ready queue
 	printf("Add node to ready queue\n");
-	_os_add_node_priority(nodeHead, node);
+	_os_add_node_priority(&_os_ready_queue[priority], node);
 
 	printf("task stack pointer : %p\n", task->stkPtr);
 	PRINT("task: 0x%x, priority: %d\n", (int32u_t)task, priority);
