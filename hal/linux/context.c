@@ -48,6 +48,23 @@ addr_t _os_create_context(addr_t stack_base, size_t stack_size, void (*entry)(vo
 }
 
 void _os_restore_context(addr_t sp) {
+      int32u_t *sptr = (int32u_t *)sp;                    // type conversion of addr_t to int32u_t*
+     __asm__ __volatile__("movl %1, %%esp;\n\t"         // update %esp value to sp
+
+                          /* restoring registers */
+                          "pop %%edi;\n\t"
+                          "pop %%esi;\n\t"
+                          "pop %%ebp;\n\t"
+                          "addl $0x4, %%esp;\n\t"       // restoring %esp is not needed
+                          "pop %%ebx;\n\t"
+                          "pop %%edx;\n\t"
+                          "pop %%ecx;\n\t"
+                          "pop %%eax;\n\t"
+
+                          "pop %0;\n\t"                 // restoring _eflags
+                          "ret;\n\t"                    // return to save_context() or the entry point
+                          : "=m"(_eflags) : "m"(sptr));
+  /*
   int32u_t *spValue = (int32u_t *)sp;
   printf("===Start restore context===\n");
  __asm__ __volatile__ ("\
@@ -65,6 +82,7 @@ void _os_restore_context(addr_t sp) {
  printf("===End restore context===\n");
  __asm__ __volatile__ ("\
     ret;");
+    */
 }
 
 addr_t _os_save_context() {
