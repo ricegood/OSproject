@@ -59,6 +59,7 @@ void eos_schedule() {
 	}
 	else {
 		printf("have task!\n");
+		printf("current task tcb : %p\n", _os_current_task);
 		printf("current task stack pointer : %p\n", _os_current_task->stkPtr);
 		int32u_t stkPtr = _os_save_context();
 		printf("stkPtr = %d\n", stkPtr);
