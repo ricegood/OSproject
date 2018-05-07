@@ -59,7 +59,8 @@ void _os_restore_context(addr_t sp) {
     pop %%edx;\
     pop %%ecx;\
     pop %%eax;\
-    pop _eflags;"
+    pop _eflags;\
+    ret;"
     :: "r"(sp));
  printf("===End restore context===\n");
  __asm__ __volatile__ ("\
