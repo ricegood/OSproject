@@ -97,7 +97,7 @@ addr_t _os_save_context() {
     push %%esi;\
     push %%edi;\
     mov %%esp, %3;"
-    : "=m"(sp0), "=m"(ebp0), "=m"(sp01), "=m"(sp02) : );
+    : "=r"(sp0), "=r"(ebp0), "=r"(sp01), "=r"(sp02) : );
   printf("@@ sp0 : %p\n, @@ ebp0 : %p\n, @@ sp01 : %p\n, @@ sp02 : %p\n", sp0, ebp0, sp01, sp02);
   printf("save context2\n");
   __asm__ __volatile__ ("\
