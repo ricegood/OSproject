@@ -55,7 +55,7 @@ void eos_schedule() {
 	/* check current task */
 	if (_os_current_task->stkPtr == NULL){
 		printf("current task null!\n");
-		//_os_restore_context(_os_ready_queue[0]->ptr_data);
+		_os_restore_context(_os_ready_queue[0]->ptr_data);
 	}
 	else {
 		printf("have task!\n");
