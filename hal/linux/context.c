@@ -90,9 +90,9 @@ addr_t _os_save_context() {
     ret;"
     : "=r"(eax), "=r"(eip) : );
   
-  printf("eax : %p\n, eip : %p\n" eax, eip);
+  printf("eax : %p\n, eip : %p\n", eax, eip);
   printf("save context\n");
-  
+
   __asm__ __volatile__ ("\
     push _eflags;\
     mov %%esp, %0;\
