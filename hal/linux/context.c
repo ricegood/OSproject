@@ -104,6 +104,7 @@ addr_t _os_save_context() {
     mov %%esp, %1;\
     mov %%eax, %2;\
     mov %%ebp, %3;\
+    mov %%eax, %%ebp;\
   resume_eip:"
     : "=m"(sp1), "=m"(sp2), "=m"(eax), "=m"(ebp) : );
   printf("@@ sp1 : %p\n, sp2 : %p\n, eax : %p\n, ebp : %p\n", sp1, sp2, eax, ebp);
