@@ -99,6 +99,7 @@ void _os_restore_context(addr_t sp) {
 }
 
 addr_t _os_save_context() {
+  /*
   int32u_t* eip;
   int32u_t* sp0;
   int32u_t* sp01;
@@ -112,7 +113,6 @@ addr_t _os_save_context() {
   int32u_t* esp;
   int32u_t* ebp2;
   printf("===Start save context===\n");
-  /* push register */
   __asm__ __volatile__ ("\
     mov %%ebp, %2;\
     mov %%esp, %3;\
@@ -171,4 +171,30 @@ addr_t _os_save_context() {
   __asm__ __volatile__ ("\
     ret;"
     :: );
+    */
+      __asm__ __volatile__("push $resume_eip;\n\t"    // saving resume point.
+                         "push %0;\n\t"             // saving _eflags.
+
+                         /* saving registers */
+                         "push %%eax;\n\t"
+                         "push %%ecx;\n\t"
+                         "push %%edx;\n\t"
+                         "push %%ebx;\n\t"
+                         "push %%esp;\n\t"
+                         "push %%ebp;\n\t"
+                         "push %%esi;\n\t"
+                         "push %%edi;\n\t"
+
+                         "movl %%esp, %%eax;\n\t"   // set return value to %esp.
+                         "push 4(%%ebp);\n\t"       // push old EIP
+                         "push (%%ebp);\n\t"        // push old EBP
+                         "movl %%esp, %%ebp;\n\t"   // update %ebp
+                         "leave;\n\t"               // movl %%ebp, %%esp; pop %%ebp;
+                         "ret;\n\t"                 // return to eos_schedule() with return value (stack pointer)
+
+                         "resume_eip: \n\t"         // resume point. execution point right after returning from restore_context()
+                         "movl $0, %%eax\n\t"       // set return value to NULL
+                         "leave;\n\t"
+                         "ret;\n\t"                 // return to eos_schedule() with return value (NULL)
+                         ::"m"(_eflags));
 }
