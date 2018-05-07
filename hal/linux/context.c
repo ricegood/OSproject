@@ -111,7 +111,7 @@ addr_t _os_save_context() {
     mov %%eax, %2;\
     mov %%ebp, %3;\
   resume_eip:"
-    : "=r"(sp1), "=m"(sp2), "=m"(eax), "=m"(ebp), "=m"(ebp01) : );
+    : "=r"(sp1), "=m"(sp2), "=m"(eax), "=m"(ebp), "=r"(ebp01) : );
   printf("@@ sp1 : %p\n, sp2 : %p\n, eax : %p\n, ebp01 : %p\n, ebp : %p\n", sp1, sp2, eax, ebp01, ebp);
   
   __asm__ __volatile__ ("\
