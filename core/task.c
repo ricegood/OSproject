@@ -71,14 +71,15 @@ void eos_schedule() {
 	printf("=====Start Scheduling=====\n");
 	/* check current task */
 	if (_os_current_task->stkPtr == NULL){
+		/*
 		printf("current task null!\n");
-		printf("ready queue [0] : %p\n", _os_ready_queue[0]);
 		int i = 0;
 		while (_os_ready_queue[i] != NULL) {
 			printf("ready queue [%d] : %p\n", i, _os_ready_queue[i]->ptr_data);
 			i++;
 		}
-//		_os_restore_context(_os_ready_queue[0]->ptr_data);
+		*/
+		_os_restore_context(_os_ready_queue[0]->ptr_data->stkPtr);
 	}
 	else {
 		printf("have task!\n");
