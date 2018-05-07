@@ -32,7 +32,7 @@ int32u_t eos_create_task(eos_tcb_t *task, addr_t sblock_start, size_t sblock_siz
 	task->node.priority = priority; // set node priority
 
 	// Add node to ready queue
-	//printf("Add node to ready queue : %p\n", &(task->node));
+	// printf("Add node to ready queue : %p\n", &(task->node));
 	_os_add_node_priority(&_os_ready_queue[priority], &(task->node));
 
 	return 0;
@@ -53,20 +53,16 @@ void eos_schedule() {
 		// remove node from ready queue and restore
 		_os_remove_node(&_os_ready_queue[_os_current_task->priority], &(_os_current_task->node));
 		_os_restore_context(_os_current_task->stkPtr);
-
 	}
 	else {
-
 		// current task != NULL
 		int32u_t* stkPtr = (int32u_t *)_os_save_context();
 
 		if (stkPtr == NULL) {
-
 			// function termination
 			return;
-			
-		} else {
 
+		} else {
 			// save stkPtr to tcb
 			_os_current_task->stkPtr = stkPtr;
 
@@ -76,7 +72,7 @@ void eos_schedule() {
 			// update current task from ready queue
 			_os_current_task = (eos_tcb_t*)(_os_ready_queue[_os_current_task->priority]->ptr_data);
 			_os_remove_node(&_os_ready_queue[_os_current_task->priority], &(_os_current_task->node));
-			
+
 			// restore context
 			_os_restore_context(_os_current_task->stkPtr);
 		}
