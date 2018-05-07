@@ -1,19 +1,19 @@
 /********************************************************
  * Filename: core/eos.h
- * 
+ *
  * Author: parkjy, RTOSLab. SNU.
- * 
- * Description: 
+ *
+ * Description:
  ********************************************************/
 #ifndef EOS_H
 #define EOS_H
 #include <core/eos_internal.h>
 
 /********************************************************
- * Define  
+ * Define
  ********************************************************/
 /*
- * wait queue type (semaphore, condition variable, message queue) 
+ * wait queue type (semaphore, condition variable, message queue)
  */
 #define FIFO 0
 #define PRIORITY 1
@@ -79,19 +79,12 @@ extern void eos_trigger_counter(eos_counter_t* counter);
 
 /* The TCB (task control block) structure */
 typedef struct tcb {
-  /*
-  // 태스크 state, 우선순위, 주기, 스택 포인터 등
-  int16u_t state;
-  int32u_t priority;
-  int32u_t period;  // 언제 설정 ?
-  addr_t stkPtr;
-  _os_node_t node;
-  */
-    int32u_t state;         // state of a correstpoding task (not used in project2)
-    int32u_t priority;      // priority of a corresponding task
-    int32u_t period;        // period of a corresponding task (not used in project2)
-    addr_t stkPtr;       // stack pointer which indicates where the context of a corresponding task is saved
-    _os_node_t node;        // task node. useful for managing ready queue (project2)
+	// 태스크 state, 우선순위, 주기, 스택 포인터 등
+	int16u_t state;
+	int32u_t priority;
+	int32u_t period;  // 언제 설정 ?
+	addr_t stkPtr;
+	_os_node_t node;
 } eos_tcb_t;
 
 /*
@@ -211,7 +204,7 @@ extern void eos_ack_irq(int32u_t irq);
 
 /*
  * Enables global interrupt service.
- * Compared to the _os_interrupt_enable() function, 
+ * Compared to the _os_interrupt_enable() function,
  * this fuction always enables interrupt.
  */
 extern void eos_enable_interrupt(void);
@@ -239,7 +232,7 @@ extern void eos_disable_irq_line(int32u_t irq);
 
 
 /********************************************************
- * Message Queue Module 
+ * Message Queue Module
  ********************************************************/
 
 /*
