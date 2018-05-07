@@ -29,7 +29,7 @@ void print_context(addr_t context) {
 
 addr_t _os_create_context(addr_t stack_base, size_t stack_size, void (*entry)(void *), void *arg) {
   printf("===Start create context===\n");
-  int32u_t* sp = stack_base + stack_size/4 - 1;  // stack pointer
+  int32u_t* sp = (int32u_t *)(stack_base + stack_size/4 - 1);  // stack pointer
   //printf("***sp = %p\n", sp);
   *(sp--) = arg;    // arg
   *(sp--) = NULL;   // entry return address
@@ -48,6 +48,7 @@ addr_t _os_create_context(addr_t stack_base, size_t stack_size, void (*entry)(vo
 }
 
 void _os_restore_context(addr_t sp) {
+  int32u_t *spValue = (int32u_t *)sp;
   printf("===Start restore context===\n");
  __asm__ __volatile__ ("\
     mov %0, %%esp;\
@@ -60,7 +61,7 @@ void _os_restore_context(addr_t sp) {
     pop %%ecx;\
     pop %%eax;\
     pop _eflags;"
-    :: "r"(sp));
+    :: "m"(spValue));
  printf("===End restore context===\n");
  __asm__ __volatile__ ("\
     ret;");
