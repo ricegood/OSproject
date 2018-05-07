@@ -26,23 +26,26 @@ int32u_t eos_create_task(eos_tcb_t *task, addr_t sblock_start, size_t sblock_siz
 	printf("_os_current_task : %p\n", _os_current_task);
 	// Set TCB
 	printf("Set TCB\n");
+	printf("_os_current_task : %p\n", _os_current_task);
 	task->priority = priority; // set tcb priority
 	task->stkPtr = _os_create_context(sblock_start, sblock_size, entry, arg);	// set tcb stack pointer
 	task->state = READY; // set tcb state
 
 	// Create node
 	printf("Create node\n");
+	printf("_os_current_task : %p\n", _os_current_task);
 	_os_node_t node;
 	node.ptr_data = task;
 	node.priority = priority;
 
 	// Add node to ready queue
 	printf("Add node to ready queue\n");
+	printf("_os_current_task : %p\n", _os_current_task);
 	_os_add_node_priority(&_os_ready_queue[priority], &node);
 
 	printf("task stack pointer : %p\n", task->stkPtr);
 	PRINT("task: 0x%x, priority: %d\n", (int32u_t)task, priority);
-
+	printf("_os_current_task : %p\n", _os_current_task);
 	/*
 	int32u_t* sp = task->stkPtr;
 	printf("print edi = %p\n", *(sp++));
