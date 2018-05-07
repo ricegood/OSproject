@@ -40,7 +40,7 @@ int32u_t eos_create_task(eos_tcb_t *task, addr_t sblock_start, size_t sblock_siz
 
 	// Add node to ready queue
 	printf("Add node to ready queue : %p\n", &(task->node));
-	_os_add_node_tail(&_os_ready_queue[task->priority], &(task->node));
+	_os_add_node_priority(&_os_ready_queue[task->priority], &(task->node));
 
 	printf("task stack pointer : %p\n", task->stkPtr);
 	PRINT("task: 0x%x, priority: %d\n", (int32u_t)task, priority);
