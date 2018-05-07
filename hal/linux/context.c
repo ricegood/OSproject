@@ -29,6 +29,7 @@ void print_context(addr_t context) {
 }
 
 addr_t _os_create_context(addr_t stack_base, size_t stack_size, void (*entry)(void *), void *arg) {
+  /*
   printf("===Start create context===\n");
   int32u_t* sp = (int32u_t *)(stack_base + stack_size/4 - 1);  // stack pointer
   //printf("***sp = %p\n", sp);
@@ -46,6 +47,17 @@ addr_t _os_create_context(addr_t stack_base, size_t stack_size, void (*entry)(vo
   *(sp) = NULL;     // edi
   printf("===End create context===\n");
   return (addr_t)sp;        // return context address
+  */
+      int32u_t i;
+    int32u_t *sb = (int32u_t *)stack_base;  // type conversion of addr_t to int32u_t*
+    size_t si = stack_size/4;               // size of a entry is 4 bytes.
+    *(sb+si-1) = arg;                       // memory allocation for arg
+    *(sb+si-2) = NULL;                      // memory allocation for return address
+    *(sb+si-3) = entry;                     // memory allocation for eip
+    for(i=4;i<13;i++) {
+        *(sb+si-i) = NULL;                  // memory allocation for _eflags and registers
+    }
+    return (sb+si-12);                      // returns address of the context.
 }
 
 void _os_restore_context(addr_t sp) {

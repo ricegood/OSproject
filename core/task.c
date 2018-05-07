@@ -82,7 +82,6 @@ void eos_schedule() {
 		// remove node from ready queue
 		_os_remove_node(&_os_ready_queue[_os_current_task->priority], &(_os_current_task->node)); 
 		_os_restore_context(_os_current_task->stkPtr);	// restore context
-printf("=====Startsssss Scheduling=====\n");
 	}
 	else {
 		printf("have task!\n");
