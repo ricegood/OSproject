@@ -1,6 +1,5 @@
 #include <core/eos.h>
 #include <core/eos_internal.h>
-#include <hal/linux/emulator/private.h>
 
 typedef struct _os_context {
 	/* low address */
@@ -48,7 +47,7 @@ addr_t _os_create_context(addr_t stack_base, size_t stack_size, void (*entry)(vo
 void _os_restore_context(addr_t sp) {
 	int32u_t *spValue = (int32u_t *)sp;
 	__asm__ __volatile__ ("\
-		movl %1, %%esp;\
+		movl %0, %%esp;\
 		pop %%edi;\
 		pop %%esi;\
 		pop %%ebp;\
@@ -57,15 +56,15 @@ void _os_restore_context(addr_t sp) {
 		pop %%edx;\
 		pop %%ecx;\
 		pop %%eax;\
-		pop %0;\
+		pop _eflags;\
 		ret;"
-		: "=m"(_eflags) : "m"(spValue));
+		:: "m"(spValue));
 }
 
 addr_t _os_save_context() {
 	__asm__ __volatile__ ("\
 		push $resume_eip;\
-		push %0;\
+		push _eflags;\
 		push %%eax;\
 		push %%ecx;\
 		push %%edx;\
@@ -84,5 +83,5 @@ addr_t _os_save_context() {
 		mov $0, %%eax;\
 		leave;\
 		ret;"
-		:: "m"(_eflags));
+		:: );
 }
