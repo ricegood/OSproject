@@ -62,12 +62,8 @@ void _os_restore_context(addr_t sp) {
 }
 
 addr_t _os_save_context() {
-	int32u_t *eax;
 	__asm__ __volatile__ ("\
-	  mov %%eax, %0;\
-		call get_eip;\
-		push %%eax;\
-		mov %0, %%eax;\
+		push $get_eip;\
 		push _eflags;\
 		push %%eax;\
 		push %%ecx;\
@@ -84,7 +80,8 @@ addr_t _os_save_context() {
 		leave;\
 		ret;\
 	get_eip:\
-		mov %%esp, %%eax;\
+		mov $0, %%eax;\
+		leave;\
 		ret;"
-		: "=m"(eax) : );
+		:: );
 }
