@@ -81,12 +81,18 @@ addr_t _os_save_context() {
   printf("===Start save context===\n");
   /* push register */
   __asm__ __volatile__ ("\
-    push $resume_eip;\
-  resume_eip:\
-    pop %0;"
-    : "=r"(eip) : );
+    mov %%eax, %0;
+    call get_eip;\
+    mov %%eax, %1;
+    push %%eax;
+  get_eip:
+    mov (%%esp), %%eax;\
+    ret;"
+    : "=r"(eax), "=r"(eip) : );
+  
+  printf("eax : %p\n, eip : %p\n" eax, eip);
   printf("save context\n");
-  printf("eip : %p\n, eip");
+  
   __asm__ __volatile__ ("\
     push _eflags;\
     mov %%esp, %0;\
