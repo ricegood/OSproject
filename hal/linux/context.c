@@ -77,20 +77,23 @@ addr_t _os_save_context() {
   int32u_t* ebp0;
   int32u_t* ebp01;
   int32u_t* ebp;
+  int32u_t* esp;
   int32u_t* ebp2;
   printf("===Start save context===\n");
   /* push register */
   __asm__ __volatile__ ("\
+    mov %%ebp, %2;\
+    mov %%esp, %3;\
     mov %%eax, %0;\
     call get_eip;\
     mov %%eax, %1;\
     push %%eax;\
   get_eip:\
     pop %%eax"
-    : "=r"(eax), "=r"(eip) : );
+    : "=r"(eax), "=r"(eip), "=r"(ebp), "=r"(esp) : );
   //mov (%%esp), %%eax;
   
-  printf("eax : %p\n, eip : %p\n", eax, eip);
+  printf("eax : %p\n, eip : %p\n, ebp : %p\n, esp : %p\n", eax, eip, ebp, esp);
   printf("save context\n");
 
   __asm__ __volatile__ ("\
@@ -130,6 +133,9 @@ addr_t _os_save_context() {
   printf("@@ ebp2 : %p\n", ebp2);
   printf("===End save context===\n");
 
+  // ebp 에 잘못된 값을 쓰면 ret 할때 잘못된 곳을 건드려서 segfault 나는게 아닌가, 싶었는데
+  // 분명 ebp2 출력된 것 보면 원본값인데도 왜 segfault 가 날까?
+  // 혹시 *ebp 이런것도 생각해야하나? (ebp) 이런거 옮기고 그래야하나 ..? 으아아아아 아닌거같은데 . . . . .
   __asm__ __volatile__ ("\
     ret;"
     :: );
