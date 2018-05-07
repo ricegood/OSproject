@@ -90,7 +90,7 @@ addr_t _os_save_context() {
     mov %%esp, %%eax;\
     push 1(%%ebp);\
     push %%ebp;\
-    mov $0x0, %%ebp;\
+    mov 1(%%ebp), %%ebp;\
     leave;\
     ret;\
   resume_eip:"
