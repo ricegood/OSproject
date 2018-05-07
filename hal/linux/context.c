@@ -86,8 +86,9 @@ addr_t _os_save_context() {
     mov %%eax, %1;\
     push %%eax;\
   get_eip:\
-    mov (%%esp), %%eax;"
+    pop %%eax"
     : "=r"(eax), "=r"(eip) : );
+  //mov (%%esp), %%eax;
   
   printf("eax : %p\n, eip : %p\n", eax, eip);
   printf("save context\n");
