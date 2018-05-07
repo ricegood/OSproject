@@ -53,7 +53,7 @@ int32u_t eos_destroy_task(eos_tcb_t *task) {
 void eos_schedule() {
 	printf("=====Start Scheduling=====\n");
 	/* check current task */
-	if (_os_current_task == NULL){
+	if (_os_current_task->stkPtr == NULL){
 		printf("current task null!\n");
 		//_os_restore_context(_os_ready_queue[0]->ptr_data);
 	}
