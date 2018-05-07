@@ -63,6 +63,7 @@ void _os_restore_context(addr_t sp) {
     :: "r"(sp));
  printf("===End restore context===\n");
  __asm__ __volatile__ ("\
+    leave;\
     ret;");
 }
 
