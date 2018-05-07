@@ -85,6 +85,7 @@ addr_t _os_save_context() {
     push _eflags;"
     :: );
   printf("save context\n");
+  printf("eip : %p\n, eip");
   __asm__ __volatile__ ("\
     mov %%esp, %0;\
     mov %%ebp, %1;\
