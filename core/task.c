@@ -60,6 +60,7 @@ void eos_schedule() {
 		printf("have task!\n");
 		
 		int32u_t stkPtr = _os_save_context();
+		printf("stkPtr = %d\n", stkPtr);
 		if (stkPtr == NULL) {
 			// function termination
 			printf("save context return null! \n");
