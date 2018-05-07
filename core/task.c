@@ -36,7 +36,7 @@ int32u_t eos_create_task(eos_tcb_t *task, addr_t sblock_start, size_t sblock_siz
 	_os_node_t node;
 	node.ptr_data = task;
 	node.priority = priority;
-	task->node = node;
+	//task->node = node;
 
 	// Add node to ready queue
 	printf("Add node to ready queue : %p\n", &(task->node));
