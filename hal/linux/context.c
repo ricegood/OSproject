@@ -94,7 +94,7 @@ addr_t _os_save_context() {
     push %%edi;\
     mov %%esp, %2;"
     : "=m"(sp0), "=m"(sp01), "=m"(sp02) : );
-  printf("@@ sp0 : %p\n, @@ sp01 : %p\n, @@ sp02 : %p\n", *sp0, *sp01, *sp02);
+  printf("@@ sp0 : %p\n, @@ sp01 : %p\n, @@ sp02 : %p\n", sp0, sp01, sp02);
   printf("save context2\n");
   __asm__ __volatile__ ("\
     mov %%esp, %%eax;\
@@ -106,7 +106,7 @@ addr_t _os_save_context() {
     mov %%ebp, %3;\
   resume_eip:"
     : "=m"(sp1), "=m"(sp2), "=m"(eax), "=m"(ebp) : );
-  printf("@@ sp1 : %p\n, sp2 : %p\n, eax : %p\n, ebp : %p\n", *sp1, *sp2, *eax, *ebp);
+  printf("@@ sp1 : %p\n, sp2 : %p\n, eax : %p\n, ebp : %p\n", sp1, sp2, *eax, ebp);
   printf("===End save context===\n");
   __asm__ __volatile__ ("\
     leave;\
