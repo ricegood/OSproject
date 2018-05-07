@@ -54,13 +54,12 @@ void _os_restore_context(addr_t sp) {
     pop %%edi;\
     pop %%esi;\
     pop %%ebp;\
-    pop %%esp;\
+    add $0x4, %%esp;\
     pop %%ebx;\
     pop %%edx;\
     pop %%ecx;\
     pop %%eax;\
     pop _eflags;\
-    leave;\
     ret;"
     :: "r"(sp));
  printf("===End restore context===\n");
