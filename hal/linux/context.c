@@ -124,8 +124,7 @@ addr_t _os_save_context() {
   printf("@@ sp1 : %p\n, sp2 : %p\n, eax : %p\n, ebp01 : %p\n, ebp : %p\n, eip : %p\n", sp1, sp2, eax, ebp01, ebp, eip);
   
   __asm__ __volatile__ ("\
-    mov %%ebp, %%esp;\
-    pop %%ebp;\
+    leave;\
     mov %%ebp, %0;"
     : "=r"(ebp2) : );
   printf("@@ ebp2 : %p\n", ebp2);
