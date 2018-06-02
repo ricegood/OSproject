@@ -59,7 +59,7 @@ void eos_schedule() {
 	}
 
 	// check current task
-	if (_os_current_task == NULL){
+	if (_os_current_task == NULL){ 
 		// current task == NULL
 		// set current task from ready queue
 		_os_current_task = (eos_tcb_t*)(_os_ready_queue[highestPriority]->ptr_data);
