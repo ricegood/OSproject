@@ -6,6 +6,7 @@
  * Description: task management.
  ********************************************************/
 #include <core/eos.h>
+#include <core/scheduler.c>
 
 #define READY		1
 #define RUNNING		2
@@ -35,6 +36,9 @@ int32u_t eos_create_task(eos_tcb_t *task, addr_t sblock_start, size_t sblock_siz
 	// printf("Add node to ready queue : %p\n", &(task->node));
 	_os_add_node_priority(&_os_ready_queue[priority], &(task->node));
 
+	// Add priority to map_table
+	_os_set_ready(priority);
+
 	return 0;
 
 }
@@ -43,12 +47,22 @@ int32u_t eos_destroy_task(eos_tcb_t *task) {
 }
 
 void eos_schedule() {
+	// get highest priority
+	int32u_t highestPriority = _os_get_highest_priority();
+
+	// I'm not sure about this!!
+	while (_os_ready_queue[highestPriority]->ptr_data == NULL) {
+		// while there are no more this priority job,
+		// unset the highest priority from ready_group
+		_os_unset_ready(highestPriority);
+		highestPriority = _os_get_highest_priority();
+	}
+
 	// check current task
 	if (_os_current_task == NULL){
-
 		// current task == NULL
 		// set current task from ready queue
-		_os_current_task = (eos_tcb_t*)(_os_ready_queue[0]->ptr_data);
+		_os_current_task = (eos_tcb_t*)(_os_ready_queue[highestPriority]->ptr_data);
 
 		// remove node from ready queue and restore
 		_os_remove_node(&_os_ready_queue[_os_current_task->priority], &(_os_current_task->node));
@@ -70,7 +84,7 @@ void eos_schedule() {
 			_os_add_node_priority(&_os_ready_queue[_os_current_task->priority], &(_os_current_task->node));
 
 			// update current task from ready queue
-			_os_current_task = (eos_tcb_t*)(_os_ready_queue[_os_current_task->priority]->ptr_data);
+			_os_current_task = (eos_tcb_t*)(_os_ready_queue[highestPriority]->ptr_data);
 			_os_remove_node(&_os_ready_queue[_os_current_task->priority], &(_os_current_task->node));
 
 			// restore context
