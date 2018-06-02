@@ -117,7 +117,7 @@ void eos_sleep(int32u_t tick) {
 		_os_current_task->state = WAITING; // set tcb state
 		// Q. 여기 *,& 이런거 모르겠음 특히 콜백함수
 		eos_alarm_t* newAlarm;
-		eos_set_alarm(eos_get_system_timer(), newAlarm, _os_current_task->nextPeriodStartTime, &_os_wakeup_sleeping_task(), _os_current_task);
+		eos_set_alarm(eos_get_system_timer(), newAlarm, _os_current_task->nextPeriodStartTime, _os_wakeup_sleeping_task(), _os_current_task);
 		eos_schedule(); // context switching
 	}
 }
