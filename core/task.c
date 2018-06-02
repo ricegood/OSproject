@@ -7,6 +7,7 @@
  ********************************************************/
 #include <core/eos.h>
 #include <core/scheduler.c>
+#include <core/timer.c>
 
 #define READY		1
 #define RUNNING		2
@@ -31,6 +32,8 @@ int32u_t eos_create_task(eos_tcb_t *task, addr_t sblock_start, size_t sblock_siz
 	task->state = READY; // set tcb state
 	task->node.ptr_data = task; // set node pointer to tcb
 	task->node.priority = priority; // set node priority
+	task->period = 0;	// task period 0 (default: don't have period)
+	task->nextPeriodStartTime = 0; // default: don't have next Period Start Time
 
 	// Add node to ready queue
 	// printf("Add node to ready queue : %p\n", &(task->node));
@@ -59,38 +62,28 @@ void eos_schedule() {
 	}
 
 	// check current task
-	if (_os_current_task == NULL){
-		// current task == NULL
-		// set current task from ready queue
-		_os_current_task = (eos_tcb_t*)(_os_ready_queue[highestPriority]->ptr_data);
-
-		// remove node from ready queue and restore
-		_os_remove_node(&_os_ready_queue[_os_current_task->priority], &(_os_current_task->node));
-		_os_restore_context(_os_current_task->stkPtr);
-	}
-	else {
+	if (_os_current_task != NULL) {
 		// current task != NULL
 		int32u_t* stkPtr = (int32u_t *)_os_save_context();
 
 		if (stkPtr == NULL) {
 			// function termination
 			return;
-
 		} else {
 			// save stkPtr to tcb
 			_os_current_task->stkPtr = stkPtr;
-
 			// add current task to ready queue
 			_os_add_node_priority(&_os_ready_queue[_os_current_task->priority], &(_os_current_task->node));
-
-			// update current task from ready queue
-			_os_current_task = (eos_tcb_t*)(_os_ready_queue[highestPriority]->ptr_data);
-			_os_remove_node(&_os_ready_queue[_os_current_task->priority], &(_os_current_task->node));
-
-			// restore context
-			_os_restore_context(_os_current_task->stkPtr);
 		}
 	}
+
+	// set current task from ready queue
+	_os_current_task = (eos_tcb_t*)(_os_ready_queue[highestPriority]->ptr_data);
+	_os_current_task->state = RUNNING; // set tcb state
+
+	// remove node from ready queue and restore
+	_os_remove_node(&_os_ready_queue[_os_current_task->priority], &(_os_current_task->node));
+	_os_restore_context(_os_current_task->stkPtr);
 }
 
 eos_tcb_t *eos_get_current_task() {
@@ -104,6 +97,7 @@ int32u_t eos_get_priority(eos_tcb_t *task) {
 }
 
 void eos_set_period(eos_tcb_t *task, int32u_t period){
+	task->period = period;
 }
 
 int32u_t eos_get_period(eos_tcb_t *task) {
@@ -116,6 +110,16 @@ int32u_t eos_resume_task(eos_tcb_t *task) {
 }
 
 void eos_sleep(int32u_t tick) {
+	// if current task is period task
+	if(_os_current_task->period != 0) {
+		// save next period start time (current tick + period)
+		_os_current_task->nextPeriodStartTime = eos_get_system_timer()->tick + _os_current_task->period;
+		_os_current_task->state = WAITING; // set tcb state
+		// Q. 여기 *,& 이런거 모르겠음 특히 콜백함수
+		eos_alarm_t* newAlarm;
+		eos_set_alarm(eos_get_system_timer(), newAlarm, _os_current_task->nextPeriodStartTime, &_os_wakeup_sleeping_task(), _os_current_task);
+		eos_schedule(); // context switching
+	}
 }
 
 void _os_init_task() {

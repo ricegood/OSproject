@@ -29,7 +29,7 @@ void _os_add_node_tail(_os_node_t **head, _os_node_t *new_node) {
 /* ascending order */
 void _os_add_node_priority(_os_node_t **head, _os_node_t *new_node) {
 	 _os_node_t *node;
-	 
+
 	 if (*head) {
 	 	node = (*head);
 	 	if (node -> priority > new_node -> priority) {
@@ -38,7 +38,7 @@ void _os_add_node_priority(_os_node_t **head, _os_node_t *new_node) {
 	 		node = node -> next;
 	 		while ((node -> priority <= new_node -> priority) && node != (*head)) {
 	 			node = node -> next;
-	 		} 
+	 		}
         }
         new_node -> previous = node -> previous;
         (new_node -> previous) -> next = new_node;

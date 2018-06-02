@@ -81,7 +81,8 @@ extern void eos_trigger_counter(eos_counter_t* counter);
 typedef struct tcb {
 	int16u_t state;
 	int32u_t priority;
-	int32u_t period;  // 언제 설정 ?
+	int32u_t period;
+	int32u_t nextPeriodStartTime;
 	addr_t stkPtr;
 	_os_node_t node;
 } eos_tcb_t;
