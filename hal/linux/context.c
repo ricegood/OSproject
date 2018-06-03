@@ -56,7 +56,7 @@ void _os_restore_context(addr_t sp) {
 		pop %%edx;\
 		pop %%ecx;\
 		pop %%eax;\
-		pop _eflags;\
+		popf;\
 		ret;"
 		:: "m"(spValue));
 }
