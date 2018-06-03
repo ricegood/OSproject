@@ -82,7 +82,7 @@ void eos_schedule() {
 
 	// if ready queue becomes empty
   if(_os_ready_queue[highestPriority] == NULL)
-    _os_unset_ready(highestPriority;
+    _os_unset_ready(highestPriority);
 }
 
 eos_tcb_t *eos_get_current_task() {
