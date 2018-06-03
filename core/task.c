@@ -32,7 +32,7 @@ int32u_t eos_create_task(eos_tcb_t *task, addr_t sblock_start, size_t sblock_siz
 	task->node.priority = priority; // set node priority
 	task->period = 0;	// task period 0 (default: don't have period)
 	task->nextPeriodStartTime = eos_get_system_timer()->tick; // default: don't have next Period Start Time
-
+	printf("nextPeriodStartTime : %d", task->nextPeriodStartTime);
 	// Add node to ready queue
 	// printf("Add node to ready queue : %p\n", &(task->node));
 	_os_add_node_priority(&_os_ready_queue[priority], &(task->node));
