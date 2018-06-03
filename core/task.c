@@ -51,25 +51,22 @@ void eos_schedule() {
 	// get highest priority
 	int32u_t highestPriority = _os_get_highest_priority();
 
-	// I'm not sure about this!!
-	while (_os_ready_queue[highestPriority]->ptr_data == NULL) {
-		// while there are no more this priority job,
-		// unset the highest priority from ready_group
-		_os_unset_ready(highestPriority);
-		highestPriority = _os_get_highest_priority();
-	}
-
 	// check current task
 	if (_os_current_task != NULL) {
 		// current task != NULL
 		int32u_t* stkPtr = (int32u_t *)_os_save_context();
 
+		// current task is preempted
+		if (_os_current_task->state == RUNNING) {
+			_os_current_task->state = READY;
+			_os_set_ready(_os_current_task->priority);
+		}
+
 		if (stkPtr == NULL) {
 			// function termination
 			return;
 		} else {
-			// save stkPtr to tcb
-			_os_current_task->stkPtr = stkPtr;
+			_os_current_task->stkPtr = stkPtr; // save stkPtr to tcb
 			// add current task to ready queue
 			_os_add_node_priority(&_os_ready_queue[_os_current_task->priority], &(_os_current_task->node));
 		}
@@ -82,6 +79,10 @@ void eos_schedule() {
 	// remove node from ready queue and restore
 	_os_remove_node(&_os_ready_queue[_os_current_task->priority], &(_os_current_task->node));
 	_os_restore_context(_os_current_task->stkPtr);
+
+	// if ready queue becomes empty
+  if(_os_ready_queue[highestPriority] == NULL)
+    _os_unset_ready(highestPriority;
 }
 
 eos_tcb_t *eos_get_current_task() {
@@ -145,5 +146,6 @@ void _os_wakeup_all(_os_node_t **wait_queue, int32u_t queue_type) {
 void _os_wakeup_sleeping_task(void *arg) {
 	eos_tcb_t* task = (eos_tcb_t*)arg;
 	task->state = READY; // state transition
+	_os_set_ready(task->priority);
 	_os_add_node_priority(&_os_ready_queue[task->priority], &(task->node)); // add to ready queue
 }
