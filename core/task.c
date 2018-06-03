@@ -116,13 +116,15 @@ void eos_sleep(int32u_t tick) {
 		// save next period start time (current tick + period)
 		eos_counter_t* counter = eos_get_system_timer();
 		printf("Get Timer!\r\n");
+		// next Period Start TIme 존재자체를 삭제해도 될듯
 		_os_current_task->nextPeriodStartTime = counter -> tick + _os_current_task->period;
-		printf("Next Period Start TIme!!\r\n");
-		printf("next Period Start Time : %d, _os_current_task->nextPeriodStartTime ");
+		int32u_t timeout = counter -> tick + _os_current_task->period;
+		printf("Next Period Start Time! : %d\r\n", timeout);
+
 		_os_current_task->state = WAITING; // set tcb state
 
 		eos_alarm_t* newAlarm;
-		eos_set_alarm(eos_get_system_timer(), newAlarm, _os_current_task->nextPeriodStartTime, _os_wakeup_sleeping_task, _os_current_task);
+		eos_set_alarm(eos_get_system_timer(), newAlarm, timeout, _os_wakeup_sleeping_task, _os_current_task);
 		eos_schedule(); // context switching
 	}
 }
