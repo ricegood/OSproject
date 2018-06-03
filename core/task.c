@@ -144,5 +144,7 @@ void _os_wakeup_single(_os_node_t **wait_queue, int32u_t queue_type) {
 void _os_wakeup_all(_os_node_t **wait_queue, int32u_t queue_type) {
 }
 
-void _os_wakeup_sleeping_task(void *arg) {
+void _os_wakeup_sleeping_task(eos_tcb_t *task) {
+	task->state = READY; // state transition
+	_os_add_node_priority(&_os_ready_queue[task->priority], &(task->node)); // add to ready queue
 }
