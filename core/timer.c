@@ -40,7 +40,7 @@ eos_counter_t* eos_get_system_timer() {
 }
 
 void eos_trigger_counter(eos_counter_t* counter) {
-	eos_alarm_t* alarm
+	eos_alarm_t* alarm;
 
 	PRINT("tick\n");
 	counter->tick++;
