@@ -31,7 +31,7 @@ int32u_t eos_create_task(eos_tcb_t *task, addr_t sblock_start, size_t sblock_siz
 	task->node.ptr_data = task; // set node pointer to tcb
 	task->node.priority = priority; // set node priority
 	task->period = 0;	// task period 0 (default: don't have period)
-	task->nextPeriodStartTime = 0; // default: don't have next Period Start Time
+	task->nextPeriodStartTime = eos_get_system_timer()->tick; // default: don't have next Period Start Time
 
 	// Add node to ready queue
 	// printf("Add node to ready queue : %p\n", &(task->node));
@@ -112,7 +112,7 @@ void eos_sleep(int32u_t tick) {
 	// if current task is period task
 	if(_os_current_task->period != 0) {
 		// save next period start time (current tick + period)
-		_os_current_task->nextPeriodStartTime = eos_get_system_timer()->tick + _os_current_task->period;
+		_os_current_task->nextPeriodStartTime += _os_current_task->period;
 		_os_current_task->state = WAITING; // set tcb state
 		// Q. 여기 *,& 이런거 모르겠음 특히 콜백함수
 		eos_alarm_t* newAlarm;
