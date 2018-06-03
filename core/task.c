@@ -31,7 +31,6 @@ int32u_t eos_create_task(eos_tcb_t *task, addr_t sblock_start, size_t sblock_siz
 	task->node.ptr_data = task; // set node pointer to tcb
 	task->node.priority = priority; // set node priority
 	task->period = 0;	// task period 0 (default: don't have period)
-	task->nextPeriodStartTime = 0; // default: don't have next Period Start Time
 
 	// Add node to ready queue
 	// printf("Add node to ready queue : %p\n", &(task->node));
@@ -109,15 +108,11 @@ int32u_t eos_resume_task(eos_tcb_t *task) {
 }
 
 void eos_sleep(int32u_t tick) {
-	printf("SLEEP!\r\n");
 	// if current task is period task
 	if(_os_current_task->period != 0) {
 		printf("SLEEP IN!\r\n");
 		// save next period start time (current tick + period)
 		eos_counter_t* counter = eos_get_system_timer();
-		printf("Get Timer!\r\n");
-		// next Period Start TIme 존재자체를 삭제해도 될듯
-		_os_current_task->nextPeriodStartTime = counter -> tick + _os_current_task->period;
 		int32u_t timeout = counter -> tick + _os_current_task->period;
 		printf("Next Period Start Time! : %d\r\n", timeout);
 
