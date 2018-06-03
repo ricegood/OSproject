@@ -112,6 +112,7 @@ void eos_sleep(int32u_t tick) {
 	printf("SLEEP!\r\n");
 	// if current task is period task
 	if(_os_current_task->period != 0) {
+		printf("SLEEP IN!\r\n");
 		// save next period start time (current tick + period)
 		_os_current_task->nextPeriodStartTime = eos_get_system_timer()->tick + _os_current_task->period;
 		printf("next Period Start Time : %d, _os_current_task->nextPeriodStartTime ");
