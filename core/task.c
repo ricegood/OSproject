@@ -109,17 +109,18 @@ int32u_t eos_resume_task(eos_tcb_t *task) {
 }
 
 void eos_sleep(int32u_t tick) {
+	printf("SLEEP!\r\n");
 	// if current task is period task
-	//if(_os_current_task->period != 0) {
+	if(_os_current_task->period != 0) {
 		// save next period start time (current tick + period)
 		_os_current_task->nextPeriodStartTime = eos_get_system_timer()->tick + _os_current_task->period;
 		printf("next Period Start Time : %d, _os_current_task->nextPeriodStartTime ");
 		_os_current_task->state = WAITING; // set tcb state
-		// Q. 여기 *,& 이런거 모르겠음 특히 콜백함수
+
 		eos_alarm_t* newAlarm;
 		eos_set_alarm(eos_get_system_timer(), newAlarm, _os_current_task->nextPeriodStartTime, _os_wakeup_sleeping_task, _os_current_task);
 		eos_schedule(); // context switching
-	//}
+	}
 }
 
 void _os_init_task() {
