@@ -55,6 +55,7 @@ void eos_trigger_counter(eos_counter_t* counter) {
 		}
 		else break;	// not yet expired.
 	}
+	eos_schedule();
 }
 
 /* Timer interrupt handler */
