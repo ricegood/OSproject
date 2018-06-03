@@ -6,8 +6,6 @@
  * Description: task management.
  ********************************************************/
 #include <core/eos.h>
-#include <core/scheduler.c>
-#include <core/timer.c>
 
 #define READY		1
 #define RUNNING		2
