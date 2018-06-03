@@ -119,8 +119,11 @@ void eos_sleep(int32u_t tick) {
 		_os_current_task->state = WAITING; // set tcb state
 
 		eos_alarm_t* newAlarm;
+		printf("new alarm\r\n");
 		eos_set_alarm(eos_get_system_timer(), newAlarm, timeout, _os_wakeup_sleeping_task, _os_current_task);
+		printf("set alarm\r\n");
 		eos_schedule(); // context switching
+		printf("schedule\r\n");
 	}
 }
 
