@@ -116,12 +116,9 @@ void eos_sleep(int32u_t tick) {
 	// if current task is period task
 	if(_os_current_task->period != 0) {
 		eos_alarm_t* alarm = &(_os_current_task -> alarm); // get alarm of current task
-		// save next timeout (last timeout + period)
-		int32u_t timeout = alarm->timeout + _os_current_task->period;
+		int32u_t timeout = alarm->timeout + _os_current_task->period; // save next timeout (last timeout + period)
 		_os_current_task->state = WAITING; // set tcb state
-		printf("next timeout : %d\r\n", timeout);
-		// set alarm
-		eos_set_alarm(eos_get_system_timer(), alarm, timeout, _os_wakeup_sleeping_task, _os_current_task);
+		eos_set_alarm(eos_get_system_timer(), alarm, timeout, _os_wakeup_sleeping_task, _os_current_task); // set alarm
 		eos_schedule(); // context switching
 	}
 }
