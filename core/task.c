@@ -75,7 +75,7 @@ void eos_schedule() {
 		}
 	}
 
-	highestPriority = _os_get_highest_priority()
+	highestPriority = _os_get_highest_priority();
 
 	// set current task from ready queue
 	_os_current_task = (eos_tcb_t*)(_os_ready_queue[highestPriority]->ptr_data);
