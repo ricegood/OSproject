@@ -114,7 +114,8 @@ void eos_sleep(int32u_t tick) {
 	if(_os_current_task->period != 0) {
 		printf("SLEEP IN!\r\n");
 		// save next period start time (current tick + period)
-		_os_current_task->nextPeriodStartTime = eos_get_system_timer()->tick + _os_current_task->period;
+		eos_counter_t* counter = eos_get_system_timer();
+		_os_current_task->nextPeriodStartTime = counter -> tick + _os_current_task->period;
 		printf("next Period Start Time : %d, _os_current_task->nextPeriodStartTime ");
 		_os_current_task->state = WAITING; // set tcb state
 
