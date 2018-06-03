@@ -51,7 +51,7 @@ void eos_trigger_counter(eos_counter_t* counter) {
 		if (alarm->timeout <= counter->tick) {
 			// alarm was expired !
 			eos_set_alarm(counter, alarm, 0, NULL, NULL); // remove alarm from queue
-			alarm->handler(arg); // call the callback function
+			alarm->handler(alarm->arg); // call the callback function
 		}
 		else break;	// not yet expired.
 	}
