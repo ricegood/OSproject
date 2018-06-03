@@ -52,18 +52,18 @@ int32u_t eos_destroy_task(eos_tcb_t *task) {
 
 void eos_schedule() {
 	// get highest priority
-	int32u_t highestPriority = _os_get_highest_priority();
+	int32u_t highestPriority;
 
 	// check current task
 	if (_os_current_task != NULL) {
-		// current task != NULL
-		int32u_t* stkPtr = (int32u_t *)_os_save_context();
-
 		// current task is preempted
 		if (_os_current_task->state == RUNNING) {
 			_os_current_task->state = READY;
 			_os_set_ready(_os_current_task->priority);
 		}
+
+		// save stack pointer
+		int32u_t* stkPtr = (int32u_t *)_os_save_context();
 
 		if (stkPtr == NULL) {
 			// function termination
@@ -75,9 +75,10 @@ void eos_schedule() {
 		}
 	}
 
+	highestPriority = _os_get_highest_priority()
+
 	// set current task from ready queue
 	_os_current_task = (eos_tcb_t*)(_os_ready_queue[highestPriority]->ptr_data);
-
 	// remove node from ready queue and restore
 	_os_remove_node(&_os_ready_queue[_os_current_task->priority], &(_os_current_task->node));
 
