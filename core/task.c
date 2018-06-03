@@ -77,15 +77,16 @@ void eos_schedule() {
 
 	// set current task from ready queue
 	_os_current_task = (eos_tcb_t*)(_os_ready_queue[highestPriority]->ptr_data);
-	_os_current_task->state = RUNNING; // set tcb state
 
 	// remove node from ready queue and restore
 	_os_remove_node(&_os_ready_queue[_os_current_task->priority], &(_os_current_task->node));
-	_os_restore_context(_os_current_task->stkPtr);
 
 	// if ready queue becomes empty
   if(_os_ready_queue[highestPriority] == NULL)
     _os_unset_ready(highestPriority);
+
+	_os_current_task->state = RUNNING; // set tcb state
+	_os_restore_context(_os_current_task->stkPtr);
 }
 
 eos_tcb_t *eos_get_current_task() {
