@@ -37,21 +37,18 @@ int32u_t eos_create_task(eos_tcb_t *task, addr_t sblock_start, size_t sblock_siz
 	task->alarm.timeout = counter -> tick;
 
 	// Add node to ready queue
-	// printf("Add node to ready queue : %p\n", &(task->node));
 	_os_add_node_priority(&_os_ready_queue[priority], &(task->node));
 
 	// Add priority to map_table
 	_os_set_ready(priority);
 
 	return 0;
-
 }
 
 int32u_t eos_destroy_task(eos_tcb_t *task) {
 }
 
 void eos_schedule() {
-	// get highest priority
 	int32u_t highestPriority;
 
 	// check current task
@@ -62,19 +59,21 @@ void eos_schedule() {
 			_os_set_ready(_os_current_task->priority);
 		}
 
-		// save stack pointer
+		// save current stack pointer
 		int32u_t* stkPtr = (int32u_t *)_os_save_context();
 
 		if (stkPtr == NULL) {
 			// function termination
 			return;
 		} else {
-			_os_current_task->stkPtr = stkPtr; // save stkPtr to tcb
+			// save stkPtr to tcb
+			_os_current_task->stkPtr = stkPtr;
 			// add current task to ready queue
 			_os_add_node_priority(&_os_ready_queue[_os_current_task->priority], &(_os_current_task->node));
 		}
 	}
 
+	// get highest priority
 	highestPriority = _os_get_highest_priority();
 
 	// set current task from ready queue
@@ -82,12 +81,12 @@ void eos_schedule() {
 	// remove node from ready queue and restore
 	_os_remove_node(&_os_ready_queue[_os_current_task->priority], &(_os_current_task->node));
 
-	// if ready queue becomes empty
+	// if ready queue becomes empty, unset
   if(_os_ready_queue[highestPriority] == NULL)
     _os_unset_ready(highestPriority);
 
 	_os_current_task->state = RUNNING; // set tcb state
-	_os_restore_context(_os_current_task->stkPtr);
+	_os_restore_context(_os_current_task->stkPtr); // restore stack pointer
 }
 
 eos_tcb_t *eos_get_current_task() {
@@ -116,11 +115,12 @@ int32u_t eos_resume_task(eos_tcb_t *task) {
 void eos_sleep(int32u_t tick) {
 	// if current task is period task
 	if(_os_current_task->period != 0) {
-		eos_alarm_t* alarm = &(_os_current_task -> alarm);
-		// save next period start time (current tick + period)
+		eos_alarm_t* alarm = &(_os_current_task -> alarm); // get alarm of current task
+		// save next timeout (last timeout + period)
 		int32u_t timeout = alarm->timeout + _os_current_task->period;
 		_os_current_task->state = WAITING; // set tcb state
-		printf("timeout : %d\r\n", timeout);
+		printf("next timeout : %d\r\n", timeout);
+		// set alarm
 		eos_set_alarm(eos_get_system_timer(), alarm, timeout, _os_wakeup_sleeping_task, _os_current_task);
 		eos_schedule(); // context switching
 	}
@@ -149,8 +149,8 @@ void _os_wakeup_all(_os_node_t **wait_queue, int32u_t queue_type) {
 }
 
 void _os_wakeup_sleeping_task(void *arg) {
-	eos_tcb_t* task = (eos_tcb_t*)arg;
+	eos_tcb_t* task = (eos_tcb_t*)arg; // get tcb from argument
 	task->state = READY; // state transition
-	_os_set_ready(task->priority);
+	_os_set_ready(task->priority); // set ready
 	_os_add_node_priority(&_os_ready_queue[task->priority], &(task->node)); // add to ready queue
 }
