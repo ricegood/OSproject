@@ -142,7 +142,7 @@ void _os_wait(_os_node_t **wait_queue) {
 void _os_wakeup_single(_os_node_t **wait_queue, int32u_t queue_type) {
 	eos_tcb_t* wakeup_task; // this task will be woken up
 	wakeup_task = (*wait_queue)->ptr_data; // wakeup task is the head of wait_queue
-	_os_remove_node(wait_queue, task->node); // remove from waiting queue
+	_os_remove_node(wait_queue, wakeup_task->node); // remove from waiting queue
 	_os_wakeup_sleeping_task(wakeup_task); 	// wake up task
 	// Q. is it okay to not reschedule?
 }
