@@ -61,4 +61,15 @@ int8u_t eos_send_message(eos_mqueue_t *mq, void *message, int32s_t timeout) {
 }
 
 int8u_t eos_receive_message(eos_mqueue_t *mq, void *message, int32s_t timeout) {
+  if (eos_acquire_semaphore(&(mq->getsem), timeout) == 0) {
+    // fail to get semaphore
+    return;
+  }
+
+  // success to get semaphore
+  else {
+    memcpy(mq->front, message, mq->msg_size); // copy the message on the front
+    (mq->front) += mq->msg_size; // update front
+    eos_release_semaphore(&(mq->putsem)); // release semaphore
+  }
 }
