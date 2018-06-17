@@ -10,13 +10,65 @@
 void eos_init_semaphore(eos_semaphore_t *sem, int32u_t initial_count, int8u_t queue_type) {
 	/* initialization */
 	sem->count = initial_count; // set initial count
+	sem->wait_queue = NULL;
 	sem->queue_type = queue_type; // set queue type
 }
 
 int32u_t eos_acquire_semaphore(eos_semaphore_t *sem, int32s_t timeout) {
+	int32u_t saved_flags = eos_disable_interrupt(); // disable interrupt
+	eos_counter_t *timer = eos_get_system_timer();
+  int32u_t wait_time;
+
+	if(timeout == -1) {
+        wait_time = timer -> tick + timeout;
+        eos_set_alarm(timer, &(current_task -> alarm), wait_time, _os_wakeup_sleeping_task, current_task);
+  }
+
+	while (1) {
+		// semaphore acquire success
+		if (sem->count > 0) {
+			count--; // acquire
+			eos_restore_interrupt(saved_flags); // enable interrupt
+			return 1; // return success
+		}
+
+		// can not acquire semaphore
+		else {
+			switch (timeout) {
+				case -1: // acquire fail
+					eos_restore_interrupt(saved_flags); // enable interrupt
+					return 0; // return fail
+					break;
+
+				default:  // wait until other task release it & time out end
+					eos_tcb_t current_task = eos_get_current_task(); // get current task
+					current_task->state = WAITING; // change current state
+					if (sem->queue_type == 0) // FIFO
+						_os_add_node_tail(&(sem->wait_queue), &(current_task->node)); // add to wait queue
+					else (sem->queue_type == 1) // priority_based
+						_os_add_node_priority(&(sem->wait_queue), &(current_task->node)); // add to wait queue
+					eos_schedule(); // sleep this task
+
+					if(timeout > 0) {
+          	if(timer->tick >= wait_time) {
+	            eos_restore_interrupt(_eflags_saved);
+              return 0;
+            }
+          }
+
+					break;
+			}
+		}
+	}
 }
 
 void eos_release_semaphore(eos_semaphore_t *sem) {
+	int32u_t saved_flags = eos_disable_interrupt(); // disable interrupt
+	sem->count++;	// increase count
+	if (wait_queue != NULL) {
+		_os_wakeup_single(&(sem->wait_queue), sem->queue_type);
+	}
+	eos_restore_interrupt(_eflags_saved);
 }
 
 void eos_init_condition(eos_condition_t *cond, int32u_t queue_type) {
