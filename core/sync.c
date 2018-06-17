@@ -16,7 +16,7 @@ void eos_init_semaphore(eos_semaphore_t *sem, int32u_t initial_count, int8u_t qu
 
 int32u_t eos_acquire_semaphore(eos_semaphore_t *sem, int32s_t timeout) {
 	int32u_t saved_flags = eos_disable_interrupt(); // disable interrupt
-	eos_tcb_t current_task = eos_get_current_task(); // get current task
+	eos_tcb_t *current_task = eos_get_current_task(); // get current task
 	eos_counter_t *timer = eos_get_system_timer();
   int32u_t wait_time;
 
