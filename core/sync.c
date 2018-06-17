@@ -51,7 +51,7 @@ int32u_t eos_acquire_semaphore(eos_semaphore_t *sem, int32s_t timeout) {
 
 					if(timeout > 0) {
           	if(timer->tick >= wait_time) {
-	            eos_restore_interrupt(_eflags_saved);
+	            eos_restore_interrupt(saved_flags);
               return 0;
             }
           }
@@ -68,7 +68,7 @@ void eos_release_semaphore(eos_semaphore_t *sem) {
 	if (wait_queue != NULL) {
 		_os_wakeup_single(&(sem->wait_queue), sem->queue_type);
 	}
-	eos_restore_interrupt(_eflags_saved);
+	eos_restore_interrupt(saved_flags);
 }
 
 void eos_init_condition(eos_condition_t *cond, int32u_t queue_type) {
