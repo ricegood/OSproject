@@ -28,7 +28,7 @@ int32u_t eos_acquire_semaphore(eos_semaphore_t *sem, int32s_t timeout) {
 	while (1) {
 		// semaphore acquire success
 		if (sem->count > 0) {
-			count--; // acquire
+			sem->count--; // acquire
 			eos_restore_interrupt(saved_flags); // enable interrupt
 			return 1; // return success
 		}
@@ -42,7 +42,7 @@ int32u_t eos_acquire_semaphore(eos_semaphore_t *sem, int32s_t timeout) {
 					break;
 
 				default:  // wait until other task release it & time out end
-					current_task->state = WAITING; // change current state
+					current_task->state = 3; // WAITING, change current state
 					if (sem->queue_type == 0) // FIFO
 						_os_add_node_tail(&(sem->wait_queue), &(current_task->node)); // add to wait queue
 					else if(sem->queue_type == 1) // priority_based
@@ -65,7 +65,7 @@ int32u_t eos_acquire_semaphore(eos_semaphore_t *sem, int32s_t timeout) {
 void eos_release_semaphore(eos_semaphore_t *sem) {
 	int32u_t saved_flags = eos_disable_interrupt(); // disable interrupt
 	sem->count++;	// increase count
-	if (wait_queue != NULL) {
+	if (sem->wait_queue != NULL) {
 		_os_wakeup_single(&(sem->wait_queue), sem->queue_type);
 	}
 	eos_restore_interrupt(saved_flags);
