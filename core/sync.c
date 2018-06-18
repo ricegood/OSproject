@@ -19,8 +19,10 @@ int32u_t eos_acquire_semaphore(eos_semaphore_t *sem, int32s_t timeout) {
 	eos_tcb_t *current_task = eos_get_current_task(); // get current task
 
 	while (1) {
+		printf("restart?\r\n");
 		// semaphore acquire success
 		if (sem->count > 0) {
+			printf("acquire semaphore success!!\r\n");
 			sem->count--; // acquire
 			eos_restore_interrupt(saved_flags); // enable interrupt
 			return 1; // return success
