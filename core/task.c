@@ -141,7 +141,7 @@ void _os_wakeup_single(_os_node_t **wait_queue, int32u_t queue_type) {
 	eos_tcb_t* wakeup_task = (*wait_queue)->ptr_data; // FIFO : wakeup task is the head of wait_queue
 	if (queue_type == 1) {
 		// PRIORITY
-		_os_node_t wait_queue_node = *wait_queue;
+		_os_node_t* wait_queue_node = *wait_queue;
 		while (wait_queue_node != NULL) {
 			if (wait_queue_node->priority < wakeup_task->priority) {
 				wakeup_task = wait_queue_node->ptr_data; // update
