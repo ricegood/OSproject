@@ -42,7 +42,8 @@ eos_counter_t* eos_get_system_timer() {
 void eos_trigger_counter(eos_counter_t* counter) {
 	eos_alarm_t* alarm;
 
-	PRINT("tick\n");
+	//PRINT("tick\n");
+	PRINT("tick(%d)\n", counter->tick+1);
 	counter->tick++;
 
 	// check the alarm queue and call the expired callback function
