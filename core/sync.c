@@ -15,10 +15,13 @@ void eos_init_semaphore(eos_semaphore_t *sem, int32u_t initial_count, int8u_t qu
 }
 
 int32u_t eos_acquire_semaphore(eos_semaphore_t *sem, int32s_t timeout) {
-	int32u_t saved_flags = eos_disable_interrupt(); // disable interrupt
+	int32u_t saved_flags; // flag from disabling interrupt
 	eos_tcb_t *current_task = eos_get_current_task(); // get current task
+	eos_counter_t *timer = eos_get_system_timer(); // get system timer
 
 	while (1) {
+		saved_flags = eos_disable_interrupt(); // disable interrupt
+
 		// semaphore acquire success
 		if (sem->count > 0) {
 			sem->count--; // acquire
@@ -36,17 +39,12 @@ int32u_t eos_acquire_semaphore(eos_semaphore_t *sem, int32s_t timeout) {
 
 				default:  // wait until other task release it & time out end
 					current_task->state = 3; // change current state to "WAITING"
-					if (sem->queue_type == 0) // FIFO
-						_os_add_node_tail(&(sem->wait_queue), &(current_task->node)); // add to wait queue
-					else if(sem->queue_type == 1) {// priority_based
-						_os_add_node_priority(&(sem->wait_queue), &(current_task->node)); // add to wait queue
-					}
+					_os_add_node_tail(&(sem->wait_queue), &(current_task->node)); // add to wait queue
 					eos_restore_interrupt(saved_flags); // restore interrupt
 					eos_schedule(); // sleep this task
-					if(timeout > 0) {
-          	//eos_set_alarm(eos_get_system_timer(), &(current_task->alarm), current_task->next_period, _os_wakeup_sleeping_task, current_task);
-          }
-					break;
+					printf("#timer tick : %d\r\n", timer->tick);
+					if((timeout > 0) && (timer->tick > timeout)) return 0; // if timeout end, return fail
+					break;	// if wake up and timeout not end, continue to start loop again, and re-check semaphore count.
 			}
 		}
 	}
