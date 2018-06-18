@@ -40,7 +40,7 @@ int32u_t eos_create_task(eos_tcb_t *task, addr_t sblock_start, size_t sblock_siz
 	_os_add_node_priority(&_os_ready_queue[priority], &(task->node));
 
 	// Add priority to map_table
-	_os_set_ready(priority);
+	_os_set_ready((int8u_t)(task->priority));
 
 	return 0;
 }
@@ -56,7 +56,7 @@ void eos_schedule() {
 		// current task is preempted
 		if (_os_current_task->state == RUNNING) {
 			_os_current_task->state = READY;
-			_os_set_ready(_os_current_task->priority);
+			_os_set_ready((int8u_t)_os_current_task->priority);
 		}
 
 		// save current stack pointer
@@ -153,6 +153,6 @@ void _os_wakeup_all(_os_node_t **wait_queue, int32u_t queue_type) {
 void _os_wakeup_sleeping_task(void *arg) {
 	eos_tcb_t* task = (eos_tcb_t*)arg; // get tcb from argument
 	task->state = READY; // state transition
-	_os_set_ready(task->priority); // set ready
+	_os_set_ready((int8u_t)(task->priority)); // set ready
 	_os_add_node_priority(&_os_ready_queue[task->priority], &(task->node)); // add to ready queue
 }
