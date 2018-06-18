@@ -1,4 +1,3 @@
-/*
 #include <core/eos.h>
 
 static eos_tcb_t tcb1;
@@ -64,9 +63,9 @@ void eos_user_main()
     eos_init_mqueue(&mq1, queue1, 5, 2, FIFO);
     eos_init_mqueue(&mq2, queue2, 5, 2, FIFO);
 }
-*/
 
 
+/*
 #include <core/eos.h>
 #define STACK_SIZE 8096
 
@@ -99,3 +98,4 @@ void eos_user_main() {
     eos_create_task(&tcb3, stack3, STACK_SIZE, task3, NULL, 50);    // 태스크 3 생성
     eos_set_period(&tcb3, 8);
 }
+*/
