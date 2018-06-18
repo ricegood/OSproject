@@ -17,7 +17,7 @@ void eos_init_semaphore(eos_semaphore_t *sem, int32u_t initial_count, int8u_t qu
 int32u_t eos_acquire_semaphore(eos_semaphore_t *sem, int32s_t timeout) {
 	int32u_t saved_flags = eos_disable_interrupt(); // disable interrupt
 	eos_tcb_t *current_task = eos_get_current_task(); // get current task
-	
+
 	while (1) {
 		// semaphore acquire success
 		if (sem->count > 0) {
@@ -43,12 +43,7 @@ int32u_t eos_acquire_semaphore(eos_semaphore_t *sem, int32s_t timeout) {
 					eos_restore_interrupt(saved_flags); // restore interrupt
 					eos_schedule(); // sleep this task
 					if(timeout > 0) {
-						/*
-          	if(timer->tick >= wait_time) {
-	            eos_restore_interrupt(saved_flags);
-              return 0;
-            }
-						*/
+          	//eos_set_alarm(eos_get_system_timer(), &(current_task->alarm), current_task->next_period, _os_wakeup_sleeping_task, current_task);
           }
 					break;
 			}
