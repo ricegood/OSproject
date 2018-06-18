@@ -8,6 +8,7 @@
 #include <core/eos.h>
 
 void eos_init_mqueue(eos_mqueue_t *mq, void *queue_start, int16u_t queue_size, int8u_t msg_size, int8u_t queue_type) {
+  printf("init mq\r\n");
   mq->queue_start = (int8u_t *)queue_start;
   mq->front = (int8u_t *)queue_start;
   mq->rear = (int8u_t *)queue_start;
@@ -19,6 +20,7 @@ void eos_init_mqueue(eos_mqueue_t *mq, void *queue_start, int16u_t queue_size, i
 }
 
 int8u_t eos_send_message(eos_mqueue_t *mq, void *message, int32s_t timeout) {
+  printf("send mq\r\n");
   if (eos_acquire_semaphore(&(mq->putsem), timeout) == 0) {
     // Q. how about waiting here????
     return;
@@ -61,6 +63,7 @@ int8u_t eos_send_message(eos_mqueue_t *mq, void *message, int32s_t timeout) {
 }
 
 int8u_t eos_receive_message(eos_mqueue_t *mq, void *message, int32s_t timeout) {
+  printf("receive mq\r\n");
   if (eos_acquire_semaphore(&(mq->getsem), timeout) == 0) {
     // fail to get semaphore
     return;
