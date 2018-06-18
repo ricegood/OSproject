@@ -46,7 +46,7 @@ int32u_t eos_acquire_semaphore(eos_semaphore_t *sem, int32s_t timeout) {
 						_os_add_node_priority(&(sem->wait_queue), &(current_task->node)); // add to wait queue
 					eos_restore_interrupt(saved_flags);
 					//printf("acquire semaphore : eos_schedule()\r\n");
-					eos_set_alarm(eos_get_system_timer(), alarm, timeout, _os_wakeup_sleeping_task, _os_current_task); // set alarm
+					eos_set_alarm(eos_get_system_timer(), alarm, timeout, _os_wakeup_sleeping_task, current_task); // set alarm
 					eos_schedule(); // sleep this task
 					//printf("acquire semaphore : scheduling end, restart!\r\n");
 					if(timeout > 0) {
