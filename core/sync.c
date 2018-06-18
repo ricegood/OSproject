@@ -62,7 +62,7 @@ int32u_t eos_acquire_semaphore(eos_semaphore_t *sem, int32s_t timeout) {
               return 0;
             }
           }
-
+					printf("acquire10 semaphore\r\n");
 					break;
 			}
 		}
