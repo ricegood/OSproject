@@ -57,6 +57,7 @@ void eos_schedule() {
 		if (_os_current_task->state == RUNNING) {
 			_os_current_task->state = READY;
 			_os_set_ready((int8u_t)_os_current_task->priority);
+			_os_add_node_tail(&_os_ready_queue[_os_current_task->priority], &(_os_current_task->node));
 		}
 
 		// save current stack pointer
@@ -68,8 +69,6 @@ void eos_schedule() {
 		} else {
 			// save stkPtr to tcb
 			_os_current_task->stkPtr = stkPtr;
-			// add current task to ready queue
-			_os_add_node_priority(&_os_ready_queue[_os_current_task->priority], &(_os_current_task->node));
 		}
 	}
 
