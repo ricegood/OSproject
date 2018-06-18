@@ -52,11 +52,13 @@ int32u_t eos_acquire_semaphore(eos_semaphore_t *sem, int32s_t timeout) {
 					eos_schedule(); // sleep this task
 					printf("acquire6 semaphore : rescheduling\r\n");
 					if(timeout > 0) {
-						printf("acquire7 semaphore\r\n");
+						printf("acquire7 semaphore : timeout > 0\r\n");
+						/*
           	if(timer->tick >= wait_time) {
 	            eos_restore_interrupt(saved_flags);
               return 0;
             }
+						*/
           }
 					printf("acquire10 semaphore : acquire end\r\n");
 					break;
