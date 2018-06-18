@@ -32,7 +32,7 @@ static void receiver_task1(void *arg)
     while (1)
     {
         PRINT("receive message from mq1\n");
-        eos_receive_message(&mq1, data, 20);
+        eos_receive_message(&mq1, data, 5);
         PRINT("received message: %s\n", data);
         eos_sleep(0);
     }
