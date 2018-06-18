@@ -18,7 +18,7 @@ int32u_t eos_acquire_semaphore(eos_semaphore_t *sem, int32s_t timeout) {
 	int32u_t saved_flags = eos_disable_interrupt(); // disable interrupt
 	eos_tcb_t *current_task = eos_get_current_task(); // get current task
 	eos_alarm_t* alarm = &(current_task -> alarm); // get alarm of current task
-	int32u_t task_timeout = alarm->timeout + current_task->period; // save next timeout (last timeout + period)
+	int32u_t task_timeout = timer->tick + current_task->period; // save next timeout (last timeout + period)
 
 	while (1) {
 		//printf("restart?\r\n");
