@@ -142,12 +142,13 @@ void _os_wakeup_single(_os_node_t **wait_queue, int32u_t queue_type) {
 	if (queue_type == 1) {
 		// PRIORITY
 		_os_node_t* wait_queue_node = *wait_queue;
-		while (wait_queue_node != NULL) {
+		while (1) {
 			printf("%d\r\n",wait_queue_node->priority);
 			if (wait_queue_node->priority < wakeup_task->priority) {
 				wakeup_task = wait_queue_node->ptr_data; // update
 			}
-			wait_queue_node = wait_queue_node->next;
+			if(wait_queue_node == wait_queue_node->next) break;
+			else wait_queue_node = wait_queue_node->next;
 		}
 	}
 	_os_remove_node(wait_queue, &(wakeup_task->node)); // remove from waiting queue
