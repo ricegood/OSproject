@@ -22,6 +22,7 @@ void eos_init_mqueue(eos_mqueue_t *mq, void *queue_start, int16u_t queue_size, i
 int8u_t eos_send_message(eos_mqueue_t *mq, void *message, int32s_t timeout) {
   printf("send mq\r\n");
   if (eos_acquire_semaphore(&(mq->putsem), timeout) == 0) {
+    printf("fail to get semaphore (putsem)\r\n");
     // Q. how about waiting here????
     return;
     /*
@@ -51,6 +52,7 @@ int8u_t eos_send_message(eos_mqueue_t *mq, void *message, int32s_t timeout) {
 
   // success to get semaphore
   else {
+    printf("success to get semaphore(putsem)\r\n");
     memcpy(mq->rear, message, mq->msg_size); // copy the message on the rear
     (mq->rear) += mq->msg_size; // update rear
     // exceed the size???
@@ -65,12 +67,14 @@ int8u_t eos_send_message(eos_mqueue_t *mq, void *message, int32s_t timeout) {
 int8u_t eos_receive_message(eos_mqueue_t *mq, void *message, int32s_t timeout) {
   printf("receive mq\r\n");
   if (eos_acquire_semaphore(&(mq->getsem), timeout) == 0) {
+    printf("fail to get semaphore (getsem)\r\n");
     // fail to get semaphore
     return;
   }
 
   // success to get semaphore
   else {
+    printf("success to get semaphore (getsem)\r\n");
     memcpy(mq->front, message, mq->msg_size); // copy the message on the front
     (mq->front) += mq->msg_size; // update front
     eos_release_semaphore(&(mq->putsem)); // release semaphore
