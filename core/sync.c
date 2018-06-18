@@ -70,7 +70,7 @@ void eos_release_semaphore(eos_semaphore_t *sem) {
 	int32u_t saved_flags = eos_disable_interrupt(); // disable interrupt
 	sem->count++;	// increase count
 	if (sem->wait_queue != NULL) {
-		printf("wakeup!\r\n");
+		// wake up
 		_os_wakeup_single(&(sem->wait_queue), sem->queue_type);
 	}
 	eos_restore_interrupt(saved_flags);
