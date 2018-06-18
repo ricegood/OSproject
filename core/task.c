@@ -142,7 +142,9 @@ void _os_wakeup_single(_os_node_t **wait_queue, int32u_t queue_type) {
 	eos_tcb_t* wakeup_task; // this task will be woken up
 	if (queue_type == 0) { // FIFO {
 		wakeup_task = wait_queue[0]->ptr_data; // wakeup task is the head of wait_queue
+		printf("test2\r\n");
 		_os_remove_node(wait_queue[0], &(wakeup_task->node)); // remove from waiting queue
+		printf("test3\r\n");
 	} else if (queue_type == 1) {
 		// PRIORITY
 		int32u_t highestPriority = _os_get_highest_priority(); // get highest priority
