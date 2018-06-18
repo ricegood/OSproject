@@ -75,7 +75,7 @@ void eos_schedule() {
 
 	// get highest priority
 	highestPriority = _os_get_highest_priority();
-
+	printf(">> highest priority : %d\r\n",highestPriority);
 	// set current task from ready queue
 	_os_current_task = (eos_tcb_t*)(_os_ready_queue[highestPriority]->ptr_data);
 	// remove node from ready queue and restore
