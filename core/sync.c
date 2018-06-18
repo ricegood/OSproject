@@ -18,6 +18,7 @@ int32u_t eos_acquire_semaphore(eos_semaphore_t *sem, int32s_t timeout) {
 	int32u_t saved_flags; // flag from disabling interrupt
 	eos_tcb_t *current_task = eos_get_current_task(); // get current task
 	eos_counter_t *timer = eos_get_system_timer(); // get system timer
+	int32s_t initial_tick = timer->tick;
 
 	while (1) {
 		saved_flags = eos_disable_interrupt(); // disable interrupt
@@ -42,8 +43,8 @@ int32u_t eos_acquire_semaphore(eos_semaphore_t *sem, int32s_t timeout) {
 					_os_add_node_tail(&(sem->wait_queue), &(current_task->node)); // add to wait queue
 					eos_restore_interrupt(saved_flags); // restore interrupt
 					eos_schedule(); // sleep this task
-					printf("#timer tick : %d\r\n", timer->tick);
-					if((timeout > 0) && (timer->tick > timeout)) return 0; // if timeout end, return fail
+					printf("#initial tick : %d, current tick : %d\r\n", initial_tick, timer->tick);
+					if((timeout > 0) && (timer->tick > timeout + initial_tick)) return 0; // if timeout end, return fail
 					break;	// if wake up and timeout not end, continue to start loop again, and re-check semaphore count.
 			}
 		}
