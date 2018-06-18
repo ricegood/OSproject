@@ -143,7 +143,6 @@ void _os_wakeup_single(_os_node_t **wait_queue, int32u_t queue_type) {
 		// PRIORITY
 		_os_node_t* wait_queue_node = *wait_queue;
 		while (1) {
-			printf("%d\r\n",wait_queue_node->priority);
 			if (wait_queue_node->priority < wakeup_task->priority) {
 				wakeup_task = wait_queue_node->ptr_data; // update
 			}
