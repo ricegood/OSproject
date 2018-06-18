@@ -138,13 +138,16 @@ void _os_wait(_os_node_t **wait_queue) {
 }
 
 void _os_wakeup_single(_os_node_t **wait_queue, int32u_t queue_type) {
-	eos_tcb_t* wakeup_task; // this task will be woken up
-	if (queue_type == 0) {
-		// FIFO
-		wakeup_task = (*wait_queue)->ptr_data; // wakeup task is the head of wait_queue
-	} else if (queue_type == 1) {
+	eos_tcb_t* wakeup_task = (*wait_queue)->ptr_data; // FIFO : wakeup task is the head of wait_queue
+	if (queue_type == 1) {
 		// PRIORITY
-		int32u_t highestPriority;
+		eos_tcb_t* wait_queue_task = wakeup_task;
+		while (wait_queue_task != NULL) {
+			if (wait_queue_task->priority < wakeup_task->priority) {
+				wakeup_task = wait_queue_task->ptr_data; // update
+			}
+			wait_queue_task = wait_queue_task->next;
+		}
 	}
 	_os_remove_node(wait_queue, &(wakeup_task->node)); // remove from waiting queue
 	_os_wakeup_sleeping_task(wakeup_task); 	// wake up task
