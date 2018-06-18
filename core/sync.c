@@ -17,14 +17,6 @@ void eos_init_semaphore(eos_semaphore_t *sem, int32u_t initial_count, int8u_t qu
 int32u_t eos_acquire_semaphore(eos_semaphore_t *sem, int32s_t timeout) {
 	int32u_t saved_flags = eos_disable_interrupt(); // disable interrupt
 	eos_tcb_t *current_task = eos_get_current_task(); // get current task
-	eos_counter_t *timer = eos_get_system_timer();
-  int32u_t wait_time;
-
-	if(timeout == -1) {
-		printf("timeout == -1\r\n");
-    wait_time = timer->tick + timeout;
-    eos_set_alarm(timer, &(current_task->alarm), wait_time, _os_wakeup_sleeping_task, current_task);
-  }
 
 	while (1) {
 		// semaphore acquire success
@@ -49,12 +41,14 @@ int32u_t eos_acquire_semaphore(eos_semaphore_t *sem, int32s_t timeout) {
 				default:  // wait until other task release it & time out end
 					printf("restart!! 3\r\n");
 					current_task->state = 3; // WAITING, change current state
-					printf("restart!! \r\n");
+					printf("restart!! 4\r\n");
+					/* ====== segmentation fault here ====== */
 					if (sem->queue_type == 0) // FIFO
 						_os_add_node_tail(&(sem->wait_queue), &(current_task->node)); // add to wait queue
 					else if(sem->queue_type == 1) // priority_based
 						_os_add_node_priority(&(sem->wait_queue), &(current_task->node)); // add to wait queue
 					printf("acquire5 semaphore : add to wait queue\r\n");
+					eos_restore_interrupt(saved_flags);
 					eos_schedule(); // sleep this task
 					printf("acquire6 semaphore : rescheduling\r\n");
 					if(timeout > 0) {
