@@ -45,7 +45,7 @@ static void receiver_task2(void *arg)
     while (1)
     {
         PRINT("receive message from mq2\n");
-        eos_receive_message(&mq2, data, -1);
+        eos_receive_message(&mq2, data, 0);
         PRINT("received message: %s\n", data);
         eos_sleep(0);
     }
