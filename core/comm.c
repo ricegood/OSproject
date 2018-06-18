@@ -21,12 +21,14 @@ void eos_init_mqueue(eos_mqueue_t *mq, void *queue_start, int16u_t queue_size, i
 int8u_t eos_send_message(eos_mqueue_t *mq, void *message, int32s_t timeout) {
   if (eos_acquire_semaphore(&(mq->putsem), timeout) == 0) {
     // fail to get semaphore
+    printf("fail to receive!\r\n");
     return;
   }
   // success to get semaphore
   else {
     memcpy(mq->rear, message, mq->msg_size); // copy the rear to message
     (mq->rear) += mq->msg_size; // update rear
+    // use circular queue (mqueue has finite address space)
     if(mq->rear >= mq->queue_start + mq->queue_size)
       mq->rear = mq->queue_start;
     eos_release_semaphore(&(mq->getsem)); // release semaphore
@@ -44,6 +46,7 @@ int8u_t eos_receive_message(eos_mqueue_t *mq, void *message, int32s_t timeout) {
   else {
     memcpy(message, mq->front, mq->msg_size); // copy the message to the front
     (mq->front) += mq->msg_size; // update front
+    // use circular queue (mqueue has finite address space)
     if(mq->front >= mq->queue_start + mq->queue_size)
       mq->front = mq->queue_start;
     eos_release_semaphore(&(mq->putsem)); // release semaphore

@@ -32,7 +32,7 @@ static void receiver_task1(void *arg)
     while (1)
     {
         PRINT("receive message from mq1\n");
-        eos_receive_message(&mq1, data, 5);
+        eos_receive_message(&mq1, data, 0);
         PRINT("received message: %s\n", data);
         eos_sleep(0);
     }
@@ -56,7 +56,7 @@ void eos_user_main()
     eos_create_task(&tcb1, (addr_t)stack1, 8096, sender_task, NULL, 50);
     eos_create_task(&tcb2, (addr_t)stack2, 8096, receiver_task1, NULL, 10);
     eos_create_task(&tcb3, (addr_t)stack3, 8096, receiver_task2, NULL, 10);
-    eos_set_period(&tcb1, 15);
+    eos_set_period(&tcb1, 2);
     eos_set_period(&tcb2, 4);
     eos_set_period(&tcb3, 5);
 
