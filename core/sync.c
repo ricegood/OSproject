@@ -19,10 +19,10 @@ int32u_t eos_acquire_semaphore(eos_semaphore_t *sem, int32s_t timeout) {
 	eos_tcb_t *current_task = eos_get_current_task(); // get current task
 
 	while (1) {
-		printf("restart?\r\n");
+		//printf("restart?\r\n");
 		// semaphore acquire success
 		if (sem->count > 0) {
-			printf("acquire semaphore success!!\r\n");
+			//printf("acquire semaphore success!!\r\n");
 			sem->count--; // acquire
 			eos_restore_interrupt(saved_flags); // enable interrupt
 			return 1; // return success
@@ -43,9 +43,9 @@ int32u_t eos_acquire_semaphore(eos_semaphore_t *sem, int32s_t timeout) {
 					else if(sem->queue_type == 1) // priority_based
 						_os_add_node_priority(&(sem->wait_queue), &(current_task->node)); // add to wait queue
 					eos_restore_interrupt(saved_flags);
-					printf("acquire semaphore : eos_schedule()\r\n");
+					//printf("acquire semaphore : eos_schedule()\r\n");
 					eos_schedule(); // sleep this task
-					printf("acquire semaphore : scheduling end, restart!\r\n");
+					//printf("acquire semaphore : scheduling end, restart!\r\n");
 					if(timeout > 0) {
 						//printf("acquire semaphore : timeout > 0\r\n");
 						/*
