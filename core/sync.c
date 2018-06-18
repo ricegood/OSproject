@@ -32,8 +32,9 @@ int32u_t eos_acquire_semaphore(eos_semaphore_t *sem, int32s_t timeout) {
 			sem->count--; // acquire
 			eos_restore_interrupt(saved_flags); // enable interrupt
 			return 1; // return success
+			printf("acquire3 semaphore\r\n");
 		}
-		printf("acquire3 semaphore\r\n");
+
 		// can not acquire semaphore
 		else {
 			switch (timeout) {
