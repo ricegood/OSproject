@@ -36,6 +36,7 @@ int8u_t eos_send_message(eos_mqueue_t *mq, void *message, int32s_t timeout) {
 int8u_t eos_receive_message(eos_mqueue_t *mq, void *message, int32s_t timeout) {
   if (eos_acquire_semaphore(&(mq->getsem), timeout) == 0) {
     // fail to get semaphore
+    printf("fail to receive!\r\n");
     return;
   }
 
