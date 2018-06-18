@@ -60,11 +60,15 @@ int32u_t eos_acquire_semaphore(eos_semaphore_t *sem, int32s_t timeout) {
 void eos_release_semaphore(eos_semaphore_t *sem) {
 	int32u_t saved_flags = eos_disable_interrupt(); // disable interrupt
 	sem->count++;	// increase count (release semaphore)
+	printf("segfault!?\r\n");
 	if (sem->wait_queue != NULL) {
+		printf("segfault!?oo\r\n");
 		// wake up
 		_os_wakeup_single(&(sem->wait_queue), sem->queue_type);
 	}
+	printf("segfault!?aa\r\n");
 	eos_restore_interrupt(saved_flags); // enable interrupt
+	printf("segfault!?bb\r\n");
 }
 
 void eos_init_condition(eos_condition_t *cond, int32u_t queue_type) {
