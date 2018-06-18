@@ -146,7 +146,7 @@ void _os_wakeup_single(_os_node_t **wait_queue, int32u_t queue_type) {
 	} else if (queue_type == 1) {
 		// PRIORITY
 		int32u_t highestPriority = _os_get_highest_priority(); // get highest priority
-		wakeup_task = (*wait_queue)[highestPriority]->ptr_data; // set wakeup_task from wait_queue
+		wakeup_task = wait_queue[highestPriority]->ptr_data; // set wakeup_task from wait_queue
 		_os_remove_node(wait_queue[wakeup_task->priority], &(wakeup_task->node)); // remove node from wait queue
 	}
 	_os_wakeup_sleeping_task(wakeup_task); 	// wake up task
