@@ -21,7 +21,9 @@ static void sender_task(void *arg)
         eos_send_message(&mq1, data, 0) ;
         PRINT("send message to mq2\n");
         eos_send_message(&mq2, data, 0) ;
+        printf("sender sleep before.");
         eos_sleep(0);
+        printf("sender sleep after.");
     }
 }
 
