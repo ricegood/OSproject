@@ -39,7 +39,6 @@ int32u_t eos_acquire_semaphore(eos_semaphore_t *sem, int32s_t timeout) {
 					if (sem->queue_type == 0) // FIFO
 						_os_add_node_tail(&(sem->wait_queue), &(current_task->node)); // add to wait queue
 					else if(sem->queue_type == 1) {// priority_based
-						printf("priority : %d\r\n", current_task->priority);
 						_os_add_node_priority(&(sem->wait_queue), &(current_task->node)); // add to wait queue
 					}
 					eos_restore_interrupt(saved_flags); // restore interrupt
