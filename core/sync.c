@@ -28,14 +28,14 @@ int32u_t eos_acquire_semaphore(eos_semaphore_t *sem, int32s_t timeout) {
 
 	while (1) {
 		// semaphore acquire success
-		printf("restart!!\r\n");
+		printf("(re)start!!\r\n");
 		if (sem->count > 0) {
 			sem->count--; // acquire
 			eos_restore_interrupt(saved_flags); // enable interrupt
 			printf("acquire3 semaphore : success\r\n");
 			return 1; // return success
 		}
-
+		printf("restart!! 2\r\n");
 		// can not acquire semaphore
 		else {
 			switch (timeout) {
@@ -46,12 +46,14 @@ int32u_t eos_acquire_semaphore(eos_semaphore_t *sem, int32s_t timeout) {
 					break;
 
 				default:  // wait until other task release it & time out end
+					printf("restart!! 3\r\n");
 					current_task->state = 3; // WAITING, change current state
+					printf("restart!! 4\r\n");
 					if (sem->queue_type == 0) // FIFO
 						_os_add_node_tail(&(sem->wait_queue), &(current_task->node)); // add to wait queue
 					else if(sem->queue_type == 1) // priority_based
 						_os_add_node_priority(&(sem->wait_queue), &(current_task->node)); // add to wait queue
-						printf("acquire5 semaphore : add to wait queue\r\n");
+					printf("acquire5 semaphore : add to wait queue\r\n");
 					eos_schedule(); // sleep this task
 					printf("acquire6 semaphore : rescheduling\r\n");
 					if(timeout > 0) {
