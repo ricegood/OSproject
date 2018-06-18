@@ -142,7 +142,7 @@ void _os_wakeup_single(_os_node_t **wait_queue, int32u_t queue_type) {
 	eos_tcb_t* wakeup_task; // this task will be woken up
 	if (queue_type == 0) { // FIFO {
 		printf("segfault!\r\n");
-		wakeup_task = (*wait_queue)->ptr_data; // wakeup task is the head of wait_queue
+		wakeup_task = wait_queue[0]->ptr_data; // wakeup task is the head of wait_queue
 		printf("segfault2!\r\n");
 		_os_remove_node(wait_queue, &(wakeup_task->node)); // remove from waiting queue
 		printf("segfault3!\r\n");
