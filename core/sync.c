@@ -11,11 +11,7 @@ void eos_init_semaphore(eos_semaphore_t *sem, int32u_t initial_count, int8u_t qu
 	/* initialization */
 	sem->count = initial_count; // set initial count
 	sem->queue_type = queue_type; // set queue type
-	// init multi-level ready queue
-	int32u_t i;
-	for (i = 0; i < LOWEST_PRIORITY; i++) {
-		sem->wait_queue[i] = NULL;
-	}
+	sem->wait_queue = NULL; // init ready queue
 }
 
 int32u_t eos_acquire_semaphore(eos_semaphore_t *sem, int32s_t timeout) {
@@ -41,10 +37,10 @@ int32u_t eos_acquire_semaphore(eos_semaphore_t *sem, int32s_t timeout) {
 				default:  // wait until other task release it & time out end
 					current_task->state = 3; // change current state to "WAITING"
 					if (sem->queue_type == 0) // FIFO
-						_os_add_node_tail(&(sem->wait_queue[0]), &(current_task->node)); // add to wait queue
+						_os_add_node_tail(&(sem->wait_queue), &(current_task->node)); // add to wait queue
 					else if(sem->queue_type == 1) {// priority_based
 						printf("priority : %d\r\n", current_task->priority);
-						_os_add_node_priority(&(sem->wait_queue[current_task->priority]), &(current_task->node)); // add to wait queue
+						_os_add_node_priority(&(sem->wait_queue), &(current_task->node)); // add to wait queue
 					}
 					eos_restore_interrupt(saved_flags); // restore interrupt
 					eos_schedule(); // sleep this task
@@ -60,15 +56,12 @@ int32u_t eos_acquire_semaphore(eos_semaphore_t *sem, int32s_t timeout) {
 void eos_release_semaphore(eos_semaphore_t *sem) {
 	int32u_t saved_flags = eos_disable_interrupt(); // disable interrupt
 	sem->count++;	// increase count (release semaphore)
-	printf("segfault!?\r\n");
+
 	if (sem->wait_queue != NULL) {
-		printf("segfault!?oo\r\n");
 		// wake up
 		_os_wakeup_single(&(sem->wait_queue), sem->queue_type);
 	}
-	printf("segfault!?aa\r\n");
 	eos_restore_interrupt(saved_flags); // enable interrupt
-	printf("segfault!?bb\r\n");
 }
 
 void eos_init_condition(eos_condition_t *cond, int32u_t queue_type) {

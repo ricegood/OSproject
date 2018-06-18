@@ -145,7 +145,7 @@ extern void eos_sleep(int32u_t tick);
  */
 typedef struct eos_semaphore {
 	int32u_t count; // the number of share resource instnace
-	_os_node_t *wait_queue[LOWEST_PRIORITY + 1]; // task wait queue
+	_os_node_t *wait_queue; // task wait queue
 	int8u_t queue_type;	// 0:FIFO, 1:priority-based
 } eos_semaphore_t;
 
