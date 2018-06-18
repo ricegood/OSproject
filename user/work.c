@@ -60,8 +60,8 @@ void eos_user_main()
     eos_set_period(&tcb2, 4);
     eos_set_period(&tcb3, 5);
 
-    eos_init_mqueue(&mq1, queue1, 5, 2, PRIORITY);
-    eos_init_mqueue(&mq2, queue2, 5, 2, PRIORITY);
+    eos_init_mqueue(&mq1, queue1, 5, 2, FIFO);
+    eos_init_mqueue(&mq2, queue2, 5, 2, FIFO);
 }
 
 
